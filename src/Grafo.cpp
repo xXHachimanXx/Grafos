@@ -6,12 +6,12 @@ using namespace std;
 /**
  * Método para inicializar a matriz de adjascência.
  */
-void Grafo::init(int numVertices)
+void Grafo::init(int vertices, int arestas)
 {
-    this->numVertices = numVertices;
-    this->matriz = new int*[numVertices];
+    this->vertices = vertices;
+    this->matriz = new int*[vertices];
 
-    for(int y = 0; y < numVertices; y++)
+    for(int y = 0; y < vertices; y++)
     {
         this->matriz[y] = new int[y];
     }//end for

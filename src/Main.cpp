@@ -3,14 +3,10 @@
 #include "../includes/Grafo.h"
 using namespace std;
 
-
-
-int main(int argc, char **argv)
-{    
+void quantidadeDeCasos()
+{
     int casos = 0;
-
-    cout << "Olá meu caro!" << endl;
-    cin >> casos;
+    cin >> casos; //entrar com
 
     if(casos <= 0)
     {
@@ -18,8 +14,32 @@ int main(int argc, char **argv)
     }
     else
     {
-        //tratar casos
-    }
+        cout << "Quantidade " << casos << " invalida" << endl;
+    }//end if
 
-    return 0;
+}//end quantidadeDeCasos()
+
+int lerArestas()
+{
+    int arestas;
+    cin >> arestas;
+    
+    return arestas >= 0 ? arestas : -1;
+}
+
+int lerVertices()
+{    
+    int vertices = 0;   
+    cin >> vertices;
+
+    return vertices >= 0 ? vertices : -1;
+
+}//end dadosGrafo()
+
+void main(int argc, char **argv)
+{    
+    quantidadeDeCasos(); //ler quantidade de casos
+    int arestas = lerArestas(); //ler quantidade de vertices e arestas
+    int vertices = lerVertices();
+    
 }
