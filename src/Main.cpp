@@ -19,29 +19,16 @@ int quantidadeDeCasos()
 
 }//end quantidadeDeCasos()
 
-int lerArestas()
-{
-    int arestas;
-    cin >> arestas;
-    
-    return arestas >= 0 ? arestas : -1;
-}
-
-int lerVertices()
-{    
-    int vertices = 0;   
-    cin >> vertices;
-
-    return vertices >= 0 ? vertices : -1;
-
-}//end dadosGrafo()
-
 void operar(int casos)
 {
     for(int y = 0; y < casos; y++)
     {
-        int arestas = lerArestas(); //ler quantidade de vertices e arestas
-        int vertices = lerVertices(); //ler quantidade de vertices        
+        char parametros[4];
+        int vertices, arestas;
+        cin >> parametros; //ler numero de vertices e arestas
+        vertices = (int)parametros[0]; //pegar numero vertices
+        arestas = (int)parametros[2]; //pegar numero de arestas
+
         Grafo* grafo = new Grafo(vertices, arestas);
 
         //incluir todas as arestas

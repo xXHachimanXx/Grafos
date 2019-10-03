@@ -8,16 +8,23 @@ using namespace std;
  */
 Grafo::Grafo(int vertices, int arestas)
 {
-    this->vertices = vertices;
-    this->arestas = arestas;
-    this->matriz = new int*[vertices];
+    if(vertices >= 0 && arestas >= 0)
+    {        
+        this->vertices = vertices;
+        this->arestas = arestas;
+        this->matriz = new int*[vertices];
 
-    for(int y = 0; y < vertices; y++)
+        for(int y = 0; y < vertices; y++)
+        {
+            this->matriz[y] = new int[y];
+        }//end for
+
+        init();
+    }
+    else
     {
-        this->matriz[y] = new int[y];
-    }//end for
-
-    init();
+        cout << "ERRO: Parâmetro(s) do grafo inválido(s)!";
+    }//end if
 }
 
 /**
