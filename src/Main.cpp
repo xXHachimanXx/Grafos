@@ -3,7 +3,7 @@
 #include "../includes/Grafo.h"
 using namespace std;
 
-void quantidadeDeCasos()
+int quantidadeDeCasos()
 {
     int casos = 0;
     cin >> casos; //entrar com
@@ -16,6 +16,8 @@ void quantidadeDeCasos()
     {
         cout << "Quantidade " << casos << " invalida" << endl;
     }//end if
+
+    return casos;
 
 }//end quantidadeDeCasos()
 
@@ -36,10 +38,21 @@ int lerVertices()
 
 }//end dadosGrafo()
 
+void operar(int casos)
+{
+    for(int y = 0; y < casos; y++)
+    {
+        int arestas = lerArestas(); //ler quantidade de vertices e arestas
+        int vertices = lerVertices(); //ler quantidade de vertices
+        Grafo grafo = new Grafo(vertices, arestas);
+
+    }//end for
+
+}//end operar()
+
 void main(int argc, char **argv)
 {    
-    quantidadeDeCasos(); //ler quantidade de casos
-    int arestas = lerArestas(); //ler quantidade de vertices e arestas
-    int vertices = lerVertices();
-    
+    int casos = quantidadeDeCasos(); //ler quantidade de casos
+    operar(casos);
+
 }

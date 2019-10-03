@@ -3,11 +3,12 @@ using namespace std;
 class Grafo
 {
     public:
-        int numVertices; //numero de vertices
+        int vertices; //numero de vertices
+        int arestas; //numero de arestas
         int ** matriz; //matriz de adjascência                
 
         ~Grafo(); //destrutor
-        Grafo(int tam); //construtor   
+        Grafo(int vertices, int arestas); //construtor   
         void init(); //inicializador
         void init(int tam); //inicializador
                 
