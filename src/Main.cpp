@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <iostream>
+#include <string>
 #include "../includes/Grafo.h"
 using namespace std;
 
@@ -49,6 +50,16 @@ void operar(int casos)
     }//end for
 
 }//end operar()
+
+void lerAdjascencia()
+{
+    char entrada[10];
+    cin >> entrada;
+    char v1, v2;
+
+    v1 = entrada[0];
+    v2 = entrada[2];    
+}//end lerAdjascencia()
 
 void main(int argc, char **argv)
 {    

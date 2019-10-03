@@ -10,7 +10,7 @@ void Grafo::Grafo(int vertices, int arestas)
 {
     this->vertices = vertices;
     this->arestas = arestas;
-    this->matriz = new char*[vertices];
+    this->matriz = new int*[vertices];
 
     for(int y = 0; y < vertices; y++)
     {
@@ -20,6 +20,17 @@ void Grafo::Grafo(int vertices, int arestas)
     init();
 }
 
+/**
+ * Método para registrar adjascência na matriz.
+ */
+void Grafo::adjascencia(int v1, int v2)
+{
+
+}
+
+/**
+ * Inicializar todas as adjascências com '0'.
+ */
 void Grafo::init()
 {
     if(matriz != NULL)
