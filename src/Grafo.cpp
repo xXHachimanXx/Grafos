@@ -6,7 +6,7 @@ using namespace std;
 /**
  * Método para inicializar a matriz de adjascência.
  */
-void Grafo::Grafo(int vertices, int arestas)
+Grafo::Grafo(int vertices, int arestas)
 {
     this->vertices = vertices;
     this->arestas = arestas;
@@ -14,7 +14,7 @@ void Grafo::Grafo(int vertices, int arestas)
 
     for(int y = 0; y < vertices; y++)
     {
-        this->matriz[y] = new char[y];
+        this->matriz[y] = new int[y];
     }//end for
 
     init();
@@ -23,9 +23,12 @@ void Grafo::Grafo(int vertices, int arestas)
 /**
  * Método para registrar adjascência na matriz.
  */
-void Grafo::adjascencia(int v1, int v2)
+void Grafo::conectarVertices(char v1, char v2)
 {
-
+    //transformar char em posicao na matriz
+    v1 = v1 - 97;
+    v1 = v2 - 97;    
+    this->matriz[v1][v2] = 1;
 }
 
 /**
@@ -35,10 +38,25 @@ void Grafo::init()
 {
     if(matriz != NULL)
     {
-        for(int x = 0; x < numVertices; x++)
-            for(int y = 0; y < numVertices; y++)
+        for(int x = 0; x < this->vertices; x++)
+            for(int y = 0; y < this->vertices; y++)
                 this->matriz[x][y] = 0;
     }
+}
+
+void Grafo::printMatriz()
+{
+    if(matriz != NULL)
+    {
+        for(int x = 0; x < this->vertices; x++)
+        {
+            for(int y = 0; y < this->vertices; y++)
+            {
+                cout << this->matriz[x][y] << " ";
+            }
+            cout << "\n" << endl;
+        }        
+    }else{ cout << "MATRIZ NULA!"; }
 }
 
 /**
@@ -46,7 +64,7 @@ void Grafo::init()
  */
 Grafo::~Grafo()
 {
-    for(int y = 0; y < numVertices; y++)
+    for(int y = 0; y < this->vertices; y++)
     {
         delete matriz[y];
     }
