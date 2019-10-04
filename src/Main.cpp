@@ -20,33 +20,33 @@ int quantidadeDeCasos()
 
 }//end quantidadeDeCasos()
 
+void gerarSaida(int caso, Grafo* grafo)
+{
+    cout << "Case #1: " << endl;
+    grafo->mostrarArestas();
+}
+
 void operar(int casos)
 {
     for(int y = 0; y < casos; y++)
     {
-        char parametros[4];
         int vertices, arestas; 
-        cout << "Entrar com parametros: " ;      
-        cin >> parametros; //ler numero de vertices e arestas
-
-        cout << vertices;
-        cout << arestas;
-        vertices = (int)parametros[0]; //pegar numero vertices
-        arestas = (int)parametros[2]; //pegar numero de arestas
+        cin >> vertices;
+        cin >> arestas;        
 
         Grafo* grafo = new Grafo(vertices, arestas);
 
         //incluir todas as arestas
         for(int z = 0; z < arestas; z++)
-        {
-            char entrada[4];
-            char v1, v2;
-            cin >> entrada; //ler adjascência da entrada
-            v1 = entrada[0]; //pegar primeiro vertice
-            v2 = entrada[2]; //pegar segundo vertice
+        {            
+            //pegar vertices a serem ligados
+            char v1, v2;   
+            cin >> v1; 
+            cin >> v2;            
 
             grafo->conectarVertices(v1, v2);
             grafo->printMatriz();
+
         }
     }//end for    
 

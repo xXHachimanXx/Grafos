@@ -33,9 +33,9 @@ Grafo::Grafo(int vertices, int arestas)
 void Grafo::conectarVertices(char v1, char v2)
 {
     //transformar char em posicao na matriz
-    v1 = v1 - 97;
-    v1 = v2 - 97;    
-    this->matriz[v1][v2] = 1;
+    int x = (int)v1 - 97;
+    int y = (int)v2 - 97;    
+    this->matriz[x][y] = 1;
 }
 
 /**
@@ -65,6 +65,26 @@ void Grafo::printMatriz()
         }        
     }else{ cout << "MATRIZ NULA!"; }
 }
+
+void mostrarArestas()
+{
+    string final = "";
+    
+    if(matriz != NULL)
+    {
+        for(int x = 0; x < this->vertices; x++)
+        {
+            cout << (char)(x + 97) << ",";
+            for(int y = 0; y < this->vertices; y++)
+            {
+                int temp = matriz[x][y];
+                if(temp == 1) { cout << (char)(y + 97); << ','}                
+            }
+            cout << "\n";
+        }        
+    }else{ cout << "MATRIZ NULA!"; }
+}
+
 
 /**
  * Destrutor
