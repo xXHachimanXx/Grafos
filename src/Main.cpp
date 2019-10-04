@@ -7,6 +7,7 @@ using namespace std;
 int quantidadeDeCasos()
 {
     int casos;
+    cout << "Entrar com a quantidade de casos: ";
     cin >> casos; //entrar com o numero de casos
 
     if(casos <= 0)
@@ -24,8 +25,12 @@ void operar(int casos)
     for(int y = 0; y < casos; y++)
     {
         char parametros[4];
-        int vertices, arestas;
+        int vertices, arestas; 
+        cout << "Entrar com parametros: " ;      
         cin >> parametros; //ler numero de vertices e arestas
+
+        cout << vertices;
+        cout << arestas;
         vertices = (int)parametros[0]; //pegar numero vertices
         arestas = (int)parametros[2]; //pegar numero de arestas
 
