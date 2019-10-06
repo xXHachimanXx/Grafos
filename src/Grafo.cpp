@@ -25,17 +25,18 @@ Grafo::Grafo(int vertices, int arestas)
     {
         cout << "ERRO: Parâmetro(s) do grafo inválido(s)!";
     }//end if
-}
+}//end Grafo()
 
 /**
- * Método para registrar adjascência na matriz.
+ * Destrutor
  */
-void Grafo::conectarVertices(char v1, char v2)
+Grafo::~Grafo()
 {
-    //transformar char em posicao na matriz
-    int x = (int)v1 - 97;
-    int y = (int)v2 - 97;    
-    this->matriz[x][y] = 1;
+    for(int y = 0; y < this->vertices; y++)
+    {
+        delete matriz[y];
+    }
+    delete matriz;
 }
 
 /**
@@ -49,7 +50,7 @@ void Grafo::init()
             for(int y = 0; y < this->vertices; y++)
                 this->matriz[x][y] = 0;
     }
-}
+}//end init()
 
 void Grafo::printMatriz()
 {
@@ -64,36 +65,62 @@ void Grafo::printMatriz()
             cout << "\n" << endl;
         }        
     }else{ cout << "MATRIZ NULA!"; }
-}
-
-void mostrarArestas()
-{
-    string final = "";
-    
-    if(matriz != NULL)
-    {
-        for(int x = 0; x < this->vertices; x++)
-        {
-            cout << (char)(x + 97) << ",";
-            for(int y = 0; y < this->vertices; y++)
-            {
-                int temp = matriz[x][y];
-                if(temp == 1) { cout << (char)(y + 97); << ','}                
-            }
-            cout << "\n";
-        }        
-    }else{ cout << "MATRIZ NULA!"; }
-}
-
+}//end printMatriz()
 
 /**
- * Destrutor
+ * Método para registrar adjascência na matriz.
  */
-Grafo::~Grafo()
+void Grafo::conectarVertices(char v1, char v2)
 {
+    //transformar char em posicao na matriz
+    int x = (int)v1 - 97;
+    int y = (int)v2 - 97;    
+    this->matriz[x][y] = 1;
+}//end conectarVertices()
+
+/**
+ * Método para mostrar os componentes conectados do grafo e a 
+ * quantidade destes.
+ */
+string Grafo::mostrarComponentes()
+{    
+    string listaComponentes = "";
+
+    //Inicializar um vetor para verificar se os vértices foram visitados
+    bool *visitados = new bool[this->vertices];
+    for(int y = 0; y < this->vertices; y++) 
+        visitados[y] = false;
+
     for(int y = 0; y < this->vertices; y++)
     {
-        delete matriz[y];
+        if(visitados[y] == false)
+            buscaEmProfundidade(y, visitados);
+            this->componentes++;
     }
-    delete matriz;
+    return listaComponentes;
+}//end mostrarComponentes()
+
+void Grafo::buscaEmProfundidade(int v, bool visitados[])
+{
+    visitados[v] = true; 
+    cout << indexToChar(v) << ", ";
+
+    for(int y = 0; y < this->vertices; y++) 
+    {
+        if(matriz[v][y] == 1 && !visitados[y])
+        {             
+            buscaEmProfundidade(y, visitados); 
+            cout << '\n';
+        }        
+    }//end for
+}//end buscaEmProfundidade()
+
+int Grafo::charToIndex(char v)
+{
+    return (int)v - 97;
+}
+
+char Grafo::indexToChar(int v)
+{
+    return (char)v + 97;
 }

@@ -23,12 +23,12 @@ int quantidadeDeCasos()
 void gerarSaida(int caso, Grafo* grafo)
 {
     cout << "Case #1: " << endl;
-    grafo->mostrarArestas();
+    grafo->mostrarComponentes();
 }
 
 void operar(int casos)
 {
-    for(int y = 0; y < casos; y++)
+    for(int caso = 0; caso < casos; caso++)
     {
         int vertices, arestas; 
         cin >> vertices;
@@ -45,7 +45,8 @@ void operar(int casos)
             cin >> v2;            
 
             grafo->conectarVertices(v1, v2);
-            grafo->printMatriz();
+            gerarSaida(caso, grafo);
+            //grafo->printMatriz();
 
         }
     }//end for    
