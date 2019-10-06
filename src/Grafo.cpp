@@ -61,7 +61,7 @@ void Grafo::printMatriz()
             for(int y = 0; y < this->vertices; y++)
             {
                 cout << this->matriz[x][y] << " ";
-            }
+            }            
             cout << "\n" << endl;
         }        
     }else{ cout << "MATRIZ NULA!"; }
@@ -83,8 +83,8 @@ void Grafo::conectarVertices(char v1, char v2)
  * quantidade destes.
  */
 string Grafo::mostrarComponentes()
-{    
-    string listaComponentes = "";
+{     
+    string arestas = "";
 
     //Inicializar um vetor para verificar se os vértices foram visitados
     bool *visitados = new bool[this->vertices];
@@ -94,25 +94,35 @@ string Grafo::mostrarComponentes()
     for(int y = 0; y < this->vertices; y++)
     {
         if(visitados[y] == false)
-            buscaEmProfundidade(y, visitados);
+            arestas = arestas + buscaEmProfundidade(y, visitados);            
             this->componentes++;
     }
-    return listaComponentes;
+    
+    return arestas;
+
 }//end mostrarComponentes()
 
-void Grafo::buscaEmProfundidade(int v, bool visitados[])
+/**
+ * Busca em profundidade para contar o número de componentes
+ * mostrar as adjascências.
+ */ 
+string Grafo::buscaEmProfundidade(int v, bool visitados[])
 {
+    string arestas = "";
     visitados[v] = true; 
-    cout << indexToChar(v) << ", ";
+    arestas += indexToChar(v) + ", ";
 
     for(int y = 0; y < this->vertices; y++) 
     {
         if(matriz[v][y] == 1 && !visitados[y])
         {             
-            buscaEmProfundidade(y, visitados); 
-            cout << '\n';
+            buscaEmProfundidade(y, visitados);
+            arestas += '\n';             
         }        
     }//end for
+
+    return arestas;
+    
 }//end buscaEmProfundidade()
 
 int Grafo::charToIndex(char v)

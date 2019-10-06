@@ -20,14 +20,21 @@ int quantidadeDeCasos()
 
 }//end quantidadeDeCasos()
 
-void gerarSaida(int caso, Grafo* grafo)
+string gerarSaida(int caso, Grafo* grafo)
 {
-    cout << "Case #1: " << endl;
-    grafo->mostrarComponentes();
+    string saida = "";
+
+    saida += "Case #" + to_string(caso+1) + ":\n"; //Case #x: 
+    saida += grafo->mostrarComponentes(); //a c \n a b ...
+    saida += '\n' + to_string(grafo->componentes) + " connected components\n\n";
+
+    return saida;
 }
 
 void operar(int casos)
-{
+{    
+    string saidaFinal = "";
+
     for(int caso = 0; caso < casos; caso++)
     {
         int vertices, arestas; 
@@ -44,12 +51,14 @@ void operar(int casos)
             cin >> v1; 
             cin >> v2;            
 
-            grafo->conectarVertices(v1, v2);
-            gerarSaida(caso, grafo);
-            //grafo->printMatriz();
-
+            grafo->conectarVertices(v1, v2);                       
         }
-    }//end for    
+
+        saidaFinal += gerarSaida(caso, grafo); 
+
+    }//end for
+
+    cout << saidaFinal;
 
 }//end operar()
 
