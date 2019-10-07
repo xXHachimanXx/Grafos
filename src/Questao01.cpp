@@ -1,7 +1,33 @@
 #include <stdio.h>
 #include <iostream>
-#include "../includes/Grafo.h"
+#include <string>
+
 using namespace std;
+
+class Grafo
+{
+    public:
+        int vertices; //numero de vertices
+        int arestas; //numero de arestas
+        int ** matriz; //matriz de adjascência                        
+        int componentes; //numero de componentes conectados
+
+        ~Grafo(); //destrutor
+        Grafo(int vertices, int arestas); //construtor   
+        void init(); //inicializador
+        void init(int tam); //inicializador   
+
+        void conectarVertices(char v1, char v2);             
+        void printMatriz();    
+        string buscaEmProfundidade(int vertice, bool visitados[]);
+        string mostrarComponentes();
+
+        int charToIndex(char v);
+        char indexToChar(int v);       
+};
+
+
+//////////////////// GRAFO \\\\\\\\\\\\\\\\\\\\
 
 /**
  * Método para inicializar a matriz de adjascência.
@@ -34,7 +60,6 @@ Grafo::~Grafo()
 {
     for(int y = 0; y < this->vertices; y++)
     {
-        //ERRO AQUIIIIII
         delete matriz[y];
     }
     delete matriz;
@@ -99,7 +124,7 @@ string Grafo::mostrarComponentes()
             arestas = arestas + buscaEmProfundidade(y, visitados);            
     }
 
-    delete visitados;
+    delete [] visitados;
     
     return arestas;
 
@@ -136,4 +161,74 @@ int Grafo::charToIndex(char v)
 char Grafo::indexToChar(int v)
 {
     return (char)v + 97;
+}
+
+
+//////////////////// MAIN \\\\\\\\\\\\\\\\\\\\
+
+int quantidadeDeCasos()
+{
+    int casos;
+    cout << "Entrar com a quantidade de casos: ";
+    cin >> casos; //entrar com o numero de casos
+
+    if(casos <= 0)
+    {
+        cout << "Quantidade de casos '" << casos << "' inválida.";
+        casos = -1;
+    }    
+
+    return casos;
+
+}//end quantidadeDeCasos()
+
+string gerarSaida(int caso, Grafo* grafo)
+{
+    string saida = "";
+
+    saida += "Case #" + to_string(caso+1) + ":\n"; //Case #x: 
+    saida += grafo->mostrarComponentes(); //a c \n a b ...
+    saida += '\n' + to_string(grafo->componentes) + " connected components\n\n";
+
+    return saida;
+}
+
+void operar(int casos)
+{    
+    string saidaFinal = "";
+
+    for(int caso = 0; caso < casos; caso++)
+    {
+        int vertices, arestas; 
+        cin >> vertices;
+        cin >> arestas;        
+
+        Grafo* grafo = new Grafo(vertices, arestas);
+
+        //incluir todas as arestas
+        for(int z = 0; z < arestas; z++)
+        {            
+            //pegar vertices a serem ligados
+            char v1, v2;   
+            cin >> v1; 
+            cin >> v2;            
+
+            grafo->conectarVertices(v1, v2);                       
+        }
+
+        saidaFinal += gerarSaida(caso, grafo); 
+
+    }//end for
+
+    cout << saidaFinal;
+
+}//end operar()
+
+
+int main(int argc, char **argv)
+{    
+    int casos = quantidadeDeCasos(); //ler quantidade de casos
+    operar(casos);
+
+    return 0;
 }

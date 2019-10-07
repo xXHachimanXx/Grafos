@@ -4,6 +4,8 @@
 #include "../includes/Grafo.h"
 using namespace std;
 
+//////////////////// MAIN \\\\\\\\\\\\\\\\\\\\
+
 int quantidadeDeCasos()
 {
     int casos;
@@ -55,6 +57,7 @@ void operar(int casos)
         }
 
         saidaFinal += gerarSaida(caso, grafo); 
+        delete grafo;
 
     }//end for
 
