@@ -17,6 +17,7 @@ class Grafo
         void printMatriz();    
         void buscaEmProfundidade(int vertice, bool visitados[]);
         void mostrarComponentes();
+        void gerarSaida(int caso, Grafo grafo);
 
         int charToIndex(char v);
         char indexToChar(int v);       

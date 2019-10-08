@@ -19,15 +19,13 @@ class Grafo
 
         void conectarVertices(char v1, char v2);             
         void printMatriz();    
-        string buscaEmProfundidade(int vertice, bool visitados[]);
-        string mostrarComponentes();
+        void buscaEmProfundidade(int vertice, bool visitados[]);
+        void mostrarComponentes();
 
         int charToIndex(char v);
         char indexToChar(int v);       
 };
 
-
-//////////////////// GRAFO \\\\\\\\\\\\\\\\\\\\
 
 /**
  * Método para inicializar a matriz de adjascência.
@@ -39,11 +37,12 @@ Grafo::Grafo(int vertices, int arestas)
         this->vertices = vertices;
         this->arestas = arestas;
         this->matriz = new int*[vertices];
+        this->componentes = 0;
 
         for(int y = 0; y < vertices; y++)
         {
             this->matriz[y] = new int[y];
-        }//end for
+        }//end for        
 
         init();
     }
@@ -60,6 +59,7 @@ Grafo::~Grafo()
 {
     for(int y = 0; y < this->vertices; y++)
     {
+        //ERRO AQUIIIIII
         delete matriz[y];
     }
     delete matriz;
@@ -108,25 +108,20 @@ void Grafo::conectarVertices(char v1, char v2)
  * Método para mostrar os componentes conectados do grafo e a 
  * quantidade destes.
  */
-string Grafo::mostrarComponentes()
+void Grafo::mostrarComponentes()
 {     
-    string arestas = "";
 
     //Inicializar um vetor para verificar se os vértices foram visitados
-    bool *visitados = new bool[this->vertices];
+    bool visitados[this->vertices];
     for(int y = 0; y < this->vertices; y++) 
         visitados[y] = false;
 
     for(int y = 0; y < this->vertices; y++)
     {
         if(visitados[y] == false)            
-            this->componentes++;            
-            arestas = arestas + buscaEmProfundidade(y, visitados);            
-    }
-
-    delete [] visitados;
-    
-    return arestas;
+            this->componentes++;
+            buscaEmProfundidade(y, visitados);            
+    }    
 
 }//end mostrarComponentes()
 
@@ -134,22 +129,19 @@ string Grafo::mostrarComponentes()
  * Busca em profundidade para contar o número de componentes
  * mostrar as adjascências.
  */ 
-string Grafo::buscaEmProfundidade(int v, bool visitados[])
-{
-    string arestas = "";
-    visitados[v] = true; 
-    arestas += indexToChar(v) + ", ";
-
+void Grafo::buscaEmProfundidade(int v, bool visitados[])
+{    
+    if(!visitados[v]){ cout << indexToChar(v) << ", "; }
+    visitados[v] = true;    
+           
     for(int y = 0; y < this->vertices; y++) 
     {
         if(matriz[v][y] == 1 && !visitados[y])
-        {             
+        {                  
             buscaEmProfundidade(y, visitados);
-            arestas += '\n';             
+            cout << "\n";   
         }        
     }//end for
-
-    return arestas;
     
 }//end buscaEmProfundidade()
 
@@ -182,20 +174,15 @@ int quantidadeDeCasos()
 
 }//end quantidadeDeCasos()
 
-string gerarSaida(int caso, Grafo* grafo)
-{
-    string saida = "";
-
-    saida += "Case #" + to_string(caso+1) + ":\n"; //Case #x: 
-    saida += grafo->mostrarComponentes(); //a c \n a b ...
-    saida += '\n' + to_string(grafo->componentes) + " connected components\n\n";
-
-    return saida;
+void gerarSaida(int caso, Grafo grafo)
+{    
+    cout << "Case #" << to_string(caso+1) << ":\n"; //Case #x: 
+    grafo.mostrarComponentes(); //a c \n a b ...
+    cout << '\n' << to_string(grafo.componentes) << " connected components\n\n";
 }
 
 void operar(int casos)
 {    
-    string saidaFinal = "";
 
     for(int caso = 0; caso < casos; caso++)
     {
@@ -203,24 +190,22 @@ void operar(int casos)
         cin >> vertices;
         cin >> arestas;        
 
-        Grafo* grafo = new Grafo(vertices, arestas);
+        Grafo grafo(vertices, arestas);
 
         //incluir todas as arestas
         for(int z = 0; z < arestas; z++)
-        {            
+        {
             //pegar vertices a serem ligados
             char v1, v2;   
             cin >> v1; 
-            cin >> v2;            
+            cin >> v2;
 
-            grafo->conectarVertices(v1, v2);                       
+            grafo.conectarVertices(v1, v2);                                   
         }
-
-        saidaFinal += gerarSaida(caso, grafo); 
+        
+        gerarSaida(caso, grafo);    
 
     }//end for
-
-    cout << saidaFinal;
 
 }//end operar()
 

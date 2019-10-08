@@ -4,7 +4,7 @@
 #include "../includes/Grafo.h"
 using namespace std;
 
-//////////////////// MAIN \\\\\\\\\\\\\\\\\\\\
+//////////////////// MAIN \\\\\\\\\\\\\\\\\\\
 
 int quantidadeDeCasos()
 {
@@ -22,12 +22,6 @@ int quantidadeDeCasos()
 
 }//end quantidadeDeCasos()
 
-void gerarSaida(int caso, Grafo grafo)
-{    
-    cout << "Case #" << to_string(caso+1) << ":\n"; //Case #x: 
-    grafo.mostrarComponentes(); //a c \n a b ...
-    cout << '\n' << to_string(grafo.componentes) << " connected components\n\n";
-}
 
 void operar(int casos)
 {    
@@ -42,7 +36,7 @@ void operar(int casos)
 
         //incluir todas as arestas
         for(int z = 0; z < arestas; z++)
-        {            
+        {
             //pegar vertices a serem ligados
             char v1, v2;   
             cin >> v1; 
@@ -51,8 +45,9 @@ void operar(int casos)
             grafo.conectarVertices(v1, v2);                                   
         }
         
-        gerarSaida(caso, grafo);
-
+        grafo.gerarSaida(caso, grafo);
+        cout << "VRAUUUUU";
+        
     }//end for
 
 }//end operar()
