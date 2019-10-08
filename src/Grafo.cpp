@@ -13,11 +13,12 @@ Grafo::Grafo(int vertices, int arestas)
         this->vertices = vertices;
         this->arestas = arestas;
         this->matriz = new int*[vertices];
+        this->componentes = 0;
 
         for(int y = 0; y < vertices; y++)
         {
             this->matriz[y] = new int[y];
-        }//end for
+        }//end for        
 
         init();
     }
@@ -83,25 +84,20 @@ void Grafo::conectarVertices(char v1, char v2)
  * Método para mostrar os componentes conectados do grafo e a 
  * quantidade destes.
  */
-string Grafo::mostrarComponentes()
+void Grafo::mostrarComponentes()
 {     
-    string arestas = "";
 
     //Inicializar um vetor para verificar se os vértices foram visitados
-    bool *visitados = new bool[this->vertices];
+    bool visitados[this->vertices];
     for(int y = 0; y < this->vertices; y++) 
         visitados[y] = false;
 
     for(int y = 0; y < this->vertices; y++)
     {
         if(visitados[y] == false)            
-            this->componentes++;            
-            arestas = arestas + buscaEmProfundidade(y, visitados);            
-    }
-
-    delete visitados;
-    
-    return arestas;
+            this->componentes++;
+            buscaEmProfundidade(y, visitados);            
+    }    
 
 }//end mostrarComponentes()
 
@@ -109,22 +105,19 @@ string Grafo::mostrarComponentes()
  * Busca em profundidade para contar o número de componentes
  * mostrar as adjascências.
  */ 
-string Grafo::buscaEmProfundidade(int v, bool visitados[])
-{
-    string arestas = "";
-    visitados[v] = true; 
-    arestas += indexToChar(v) + ", ";
-
+void Grafo::buscaEmProfundidade(int v, bool visitados[])
+{    
+    if(!visitados[v]){ cout << indexToChar(v) << ", "; }
+    visitados[v] = true;    
+           
     for(int y = 0; y < this->vertices; y++) 
     {
         if(matriz[v][y] == 1 && !visitados[y])
-        {             
+        {                  
             buscaEmProfundidade(y, visitados);
-            arestas += '\n';             
+            cout << "\n";   
         }        
     }//end for
-
-    return arestas;
     
 }//end buscaEmProfundidade()
 

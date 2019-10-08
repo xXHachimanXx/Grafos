@@ -15,8 +15,8 @@ class Grafo
 
         void conectarVertices(char v1, char v2);             
         void printMatriz();    
-        string buscaEmProfundidade(int vertice, bool visitados[]);
-        string mostrarComponentes();
+        void buscaEmProfundidade(int vertice, bool visitados[]);
+        void mostrarComponentes();
 
         int charToIndex(char v);
         char indexToChar(int v);       

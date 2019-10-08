@@ -22,20 +22,15 @@ int quantidadeDeCasos()
 
 }//end quantidadeDeCasos()
 
-string gerarSaida(int caso, Grafo* grafo)
-{
-    string saida = "";
-
-    saida += "Case #" + to_string(caso+1) + ":\n"; //Case #x: 
-    saida += grafo->mostrarComponentes(); //a c \n a b ...
-    saida += '\n' + to_string(grafo->componentes) + " connected components\n\n";
-
-    return saida;
+void gerarSaida(int caso, Grafo grafo)
+{    
+    cout << "Case #" << to_string(caso+1) << ":\n"; //Case #x: 
+    grafo.mostrarComponentes(); //a c \n a b ...
+    cout << '\n' << to_string(grafo.componentes) << " connected components\n\n";
 }
 
 void operar(int casos)
 {    
-    string saidaFinal = "";
 
     for(int caso = 0; caso < casos; caso++)
     {
@@ -43,7 +38,7 @@ void operar(int casos)
         cin >> vertices;
         cin >> arestas;        
 
-        Grafo* grafo = new Grafo(vertices, arestas);
+        Grafo grafo(vertices, arestas);
 
         //incluir todas as arestas
         for(int z = 0; z < arestas; z++)
@@ -51,17 +46,14 @@ void operar(int casos)
             //pegar vertices a serem ligados
             char v1, v2;   
             cin >> v1; 
-            cin >> v2;            
+            cin >> v2;
 
-            grafo->conectarVertices(v1, v2);                       
+            grafo.conectarVertices(v1, v2);                                   
         }
-
-        saidaFinal += gerarSaida(caso, grafo); 
-        delete grafo;
+        
+        gerarSaida(caso, grafo);
 
     }//end for
-
-    cout << saidaFinal;
 
 }//end operar()
 
