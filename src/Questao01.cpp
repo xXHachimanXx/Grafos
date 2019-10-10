@@ -21,6 +21,7 @@ class Grafo
         void printMatriz();    
         void buscaEmProfundidade(int vertice, bool visitados[]);
         void mostrarComponentes();
+        void gerarSaida(int caso, Grafo* grafo);
 
         int charToIndex(char v);
         char indexToChar(int v);       
@@ -145,6 +146,13 @@ void Grafo::buscaEmProfundidade(int v, bool visitados[])
     
 }//end buscaEmProfundidade()
 
+void Grafo::gerarSaida(int caso, Grafo* grafo)
+{    
+    cout << "Case #" << to_string(caso+1) << ":\n"; //Case #x: 
+    grafo->mostrarComponentes(); //a c \n a b ...
+    cout << '\n' << grafo->componentes << " connected components\n\n";    
+}
+
 int Grafo::charToIndex(char v)
 {
     return (int)v - 97;
@@ -156,7 +164,7 @@ char Grafo::indexToChar(int v)
 }
 
 
-//////////////////// MAIN \\\\\\\\\\\\\\\\\\\\
+//////////////////// MAIN \\\\\\\\\\\\\\\\\\\
 
 int quantidadeDeCasos()
 {
@@ -174,12 +182,6 @@ int quantidadeDeCasos()
 
 }//end quantidadeDeCasos()
 
-void gerarSaida(int caso, Grafo grafo)
-{    
-    cout << "Case #" << to_string(caso+1) << ":\n"; //Case #x: 
-    grafo.mostrarComponentes(); //a c \n a b ...
-    cout << '\n' << to_string(grafo.componentes) << " connected components\n\n";
-}
 
 void operar(int casos)
 {    
@@ -203,14 +205,15 @@ void operar(int casos)
             grafo.conectarVertices(v1, v2);                                   
         }
         
-        gerarSaida(caso, grafo);    
-
+        grafo.gerarSaida(caso, &grafo);        
+        //cout << "VRAUUUUU";
+        
     }//end for
 
 }//end operar()
 
 
-int main(int argc, char **argv)
+int main()
 {    
     int casos = quantidadeDeCasos(); //ler quantidade de casos
     operar(casos);

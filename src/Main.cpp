@@ -42,18 +42,18 @@ void operar(int casos)
             cin >> v1; 
             cin >> v2;
 
-            grafo.conectarVertices(v1, v2);                                   
+            grafo.conectarVertices(v1, v2);            
         }
         
-        grafo.gerarSaida(caso, grafo);
-        cout << "VRAUUUUU";
+        grafo.gerarSaida(caso, &grafo);
+        //cout << "VRAUUUUU";
         
     }//end for
 
 }//end operar()
 
 
-int main(int argc, char **argv)
+int main()
 {    
     int casos = quantidadeDeCasos(); //ler quantidade de casos
     operar(casos);

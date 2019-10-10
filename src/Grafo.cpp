@@ -121,11 +121,11 @@ void Grafo::buscaEmProfundidade(int v, bool visitados[])
     
 }//end buscaEmProfundidade()
 
-void Grafo::gerarSaida(int caso, Grafo grafo)
+void Grafo::gerarSaida(int caso, Grafo* grafo)
 {    
     cout << "Case #" << to_string(caso+1) << ":\n"; //Case #x: 
-    grafo.mostrarComponentes(); //a c \n a b ...
-    cout << '\n' << grafo.componentes << " connected components\n\n";    
+    grafo->mostrarComponentes(); //a c \n a b ...
+    cout << '\n' << grafo->componentes << " connected components\n\n";    
 }
 
 int Grafo::charToIndex(char v)
