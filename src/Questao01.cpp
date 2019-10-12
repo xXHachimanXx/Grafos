@@ -14,8 +14,8 @@ class Grafo
 
         ~Grafo(); //destrutor
         Grafo(int vertices, int arestas); //construtor   
-        void init(); //inicializador
-        void init(int tam); //inicializador   
+        void inicializar(); //inicializador
+        //void init(int tam); //inicializador   
 
         void conectarVertices(char v1, char v2);             
         void printMatriz();    
@@ -42,10 +42,10 @@ Grafo::Grafo(int vertices, int arestas)
 
         for(int y = 0; y < vertices; y++)
         {
-            this->matriz[y] = new int[y];
+            this->matriz[y] = new int[vertices];
         }//end for        
 
-        init();
+        inicializar();
     }
     else
     {
@@ -69,7 +69,7 @@ Grafo::~Grafo()
 /**
  * Inicializar todas as adjascências com '0'.
  */
-void Grafo::init()
+void Grafo::inicializar()
 {
     if(matriz != NULL)
     {
@@ -87,7 +87,7 @@ void Grafo::printMatriz()
         {
             for(int y = 0; y < this->vertices; y++)
             {
-                cout << this->matriz[x][y] << " ";
+                cout << matriz[x][y] << " ";
             }            
             cout << "\n" << endl;
         }        
@@ -101,8 +101,9 @@ void Grafo::conectarVertices(char v1, char v2)
 {
     //transformar char em posicao na matriz
     int x = (int)v1 - 97;
-    int y = (int)v2 - 97;    
-    this->matriz[x][y] = 1;
+    int y = (int)v2 - 97;
+    //cout << "conectando " << x << " e " << y << endl;        
+    matriz[x][y] = 1;
 }//end conectarVertices()
 
 /**
@@ -111,7 +112,6 @@ void Grafo::conectarVertices(char v1, char v2)
  */
 void Grafo::mostrarComponentes()
 {     
-
     //Inicializar um vetor para verificar se os vértices foram visitados
     bool visitados[this->vertices];
     for(int y = 0; y < this->vertices; y++) 
@@ -119,9 +119,12 @@ void Grafo::mostrarComponentes()
 
     for(int y = 0; y < this->vertices; y++)
     {
-        if(visitados[y] == false)            
+        if(!visitados[y])
+        {            
+            buscaEmProfundidade(y, visitados);
+            cout << endl;
             this->componentes++;
-            buscaEmProfundidade(y, visitados);            
+        }
     }    
 
 }//end mostrarComponentes()
@@ -132,25 +135,27 @@ void Grafo::mostrarComponentes()
  */ 
 void Grafo::buscaEmProfundidade(int v, bool visitados[])
 {    
-    if(!visitados[v]){ cout << indexToChar(v) << ", "; }
+    //if(!visitados[v]){ cout << indexToChar(v) << ","; }
     visitados[v] = true;    
+    cout << indexToChar(v) << ",";
            
     for(int y = 0; y < this->vertices; y++) 
     {
         if(matriz[v][y] == 1 && !visitados[y])
         {                  
             buscaEmProfundidade(y, visitados);
-            cout << "\n";   
         }        
     }//end for
-    
+
 }//end buscaEmProfundidade()
 
 void Grafo::gerarSaida(int caso, Grafo* grafo)
-{    
+{
     cout << "Case #" << to_string(caso+1) << ":\n"; //Case #x: 
     grafo->mostrarComponentes(); //a c \n a b ...
-    cout << '\n' << grafo->componentes << " connected components\n\n";    
+    cout << grafo->componentes << " connected components\n\n";
+    //grafo->printMatriz();
+    //cout << "ERRO AQUI....." << endl;
 }
 
 int Grafo::charToIndex(char v)
@@ -168,8 +173,7 @@ char Grafo::indexToChar(int v)
 
 int quantidadeDeCasos()
 {
-    int casos;
-    cout << "Entrar com a quantidade de casos: ";
+    int casos; 
     cin >> casos; //entrar com o numero de casos
 
     if(casos <= 0)
@@ -192,7 +196,7 @@ void operar(int casos)
         cin >> vertices;
         cin >> arestas;        
 
-        Grafo grafo(vertices, arestas);
+        Grafo* grafo = new Grafo(vertices, arestas);
 
         //incluir todas as arestas
         for(int z = 0; z < arestas; z++)
@@ -202,10 +206,11 @@ void operar(int casos)
             cin >> v1; 
             cin >> v2;
 
-            grafo.conectarVertices(v1, v2);                                   
+            grafo->conectarVertices(v1, v2);                                   
         }
+        //grafo->printMatriz();
         
-        grafo.gerarSaida(caso, &grafo);        
+        grafo->gerarSaida(caso, grafo);  
         //cout << "VRAUUUUU";
         
     }//end for
