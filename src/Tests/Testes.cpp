@@ -24,6 +24,12 @@ namespace top
         out << "Ola " << mc->nome;
         return out;
     }
+
+    template<typename T>
+    T maior(T x, T y)
+    {
+        return (x > y) ? x : y;
+    }    
 }
  
  /*
@@ -45,8 +51,13 @@ istream & operator >> (istream &in,  Complex &c)
 
 int main()
 {
-   top::Saudacao* s = new top::Saudacao("Felipe");
+   top::Saudacao* s = new top::Saudacao("Felipe");   
    //cin >> c1;   
-   cout << s;
+   cout << s << endl;
+   cout << "MAIOR: " << top::maior<int>(10, 20) << endl;
+   cout << "MAIOR: " << top::maior<string>("10", "20") << endl;
+   cout << "MAIOR: " << top::maior<char>('1', '2') << endl;
+   cout << "MAIOR: " << top::maior<float>(1.5, 2.2222) << endl;
+
    return 0;
 }
