@@ -10,6 +10,7 @@ Grafo::Grafo(int vertices, int arestas)
 {
     if(vertices >= 0 && arestas >= 0)
     {        
+
         this->vertices = vertices;
         this->arestas = arestas;
         this->matriz = new int*[vertices];
@@ -17,10 +18,10 @@ Grafo::Grafo(int vertices, int arestas)
 
         for(int y = 0; y < vertices; y++)
         {
-            this->matriz[y] = new int[y];
+            this->matriz[y] = new int[vertices];
         }//end for        
 
-        init();
+        inicializar();
     }
     else
     {
@@ -33,9 +34,8 @@ Grafo::Grafo(int vertices, int arestas)
  */
 Grafo::~Grafo()
 {
-    for(int y = 0; y < this->vertices; y++)
+    for(int y = 0; y < vertices; y++)
     {
-        //ERRO AQUIIIIII
         delete matriz[y];
     }
     delete matriz;
@@ -44,7 +44,7 @@ Grafo::~Grafo()
 /**
  * Inicializar todas as adjascências com '0'.
  */
-void Grafo::init()
+void Grafo::inicializar()
 {
     if(matriz != NULL)
     {
@@ -54,6 +54,22 @@ void Grafo::init()
     }
 }//end init()
 
+ostream & operator << (ostream &out, Grafo* &grafo)
+{    
+    if(grafo->matriz != NULL)
+    {
+        for(int x = 0; x < grafo->vertices; x++)
+        {
+            for(int y = 0; y < grafo->vertices; y++)
+            {
+                cout << grafo->matriz[x][y] << " ";
+            }            
+            cout << "\n" << endl;
+        }        
+    }else{ cout << "MATRIZ NULA!"; }
+    return out;
+}
+
 void Grafo::printMatriz()
 {
     if(matriz != NULL)
@@ -62,7 +78,7 @@ void Grafo::printMatriz()
         {
             for(int y = 0; y < this->vertices; y++)
             {
-                cout << this->matriz[x][y] << " ";
+                cout << matriz[x][y] << " ";
             }            
             cout << "\n" << endl;
         }        
@@ -76,8 +92,10 @@ void Grafo::conectarVertices(char v1, char v2)
 {
     //transformar char em posicao na matriz
     int x = (int)v1 - 97;
-    int y = (int)v2 - 97;    
-    this->matriz[x][y] = 1;
+    int y = (int)v2 - 97;
+    if(x < y){ matriz[x][y] = 1; }
+    else{ matriz[y][x] = 1;}
+    
 }//end conectarVertices()
 
 /**
@@ -86,17 +104,19 @@ void Grafo::conectarVertices(char v1, char v2)
  */
 void Grafo::mostrarComponentes()
 {     
-
     //Inicializar um vetor para verificar se os vértices foram visitados
-    bool visitados[this->vertices];
+    bool *visitados = new bool[this->vertices];
     for(int y = 0; y < this->vertices; y++) 
         visitados[y] = false;
 
     for(int y = 0; y < this->vertices; y++)
     {
-        if(visitados[y] == false)            
+        if(!visitados[y])
+        {                        
+            buscaEmProfundidade(y, visitados);
+            cout << endl;
             this->componentes++;
-            buscaEmProfundidade(y, visitados);            
+        }
     }    
 
 }//end mostrarComponentes()
@@ -107,25 +127,24 @@ void Grafo::mostrarComponentes()
  */ 
 void Grafo::buscaEmProfundidade(int v, bool visitados[])
 {    
-    if(!visitados[v]){ cout << indexToChar(v) << ", "; }
     visitados[v] = true;    
+    cout << indexToChar(v) << ",";
            
     for(int y = 0; y < this->vertices; y++) 
     {
         if(matriz[v][y] == 1 && !visitados[y])
-        {                  
+        {
             buscaEmProfundidade(y, visitados);
-            cout << "\n";   
-        }        
+        }
     }//end for
-    
+
 }//end buscaEmProfundidade()
 
 void Grafo::gerarSaida(int caso, Grafo* grafo)
-{    
+{
     cout << "Case #" << to_string(caso+1) << ":\n"; //Case #x: 
     grafo->mostrarComponentes(); //a c \n a b ...
-    cout << '\n' << grafo->componentes << " connected components\n\n";    
+    cout << grafo->componentes << " connected components\n\n";    
 }
 
 int Grafo::charToIndex(char v)

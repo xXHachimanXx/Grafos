@@ -8,8 +8,7 @@ using namespace std;
 
 int quantidadeDeCasos()
 {
-    int casos;
-    cout << "Entrar com a quantidade de casos: ";
+    int casos; 
     cin >> casos; //entrar com o numero de casos
 
     if(casos <= 0)
@@ -32,7 +31,7 @@ void operar(int casos)
         cin >> vertices;
         cin >> arestas;        
 
-        Grafo grafo(vertices, arestas);
+        Grafo* grafo = new Grafo(vertices, arestas);
 
         //incluir todas as arestas
         for(int z = 0; z < arestas; z++)
@@ -42,11 +41,10 @@ void operar(int casos)
             cin >> v1; 
             cin >> v2;
 
-            grafo.conectarVertices(v1, v2);            
-        }
-        
-        grafo.gerarSaida(caso, &grafo);
-        //cout << "VRAUUUUU";
+            grafo->conectarVertices(v1, v2);            
+        }                
+        grafo->gerarSaida(caso, grafo);
+        cout << grafo;
         
     }//end for
 
