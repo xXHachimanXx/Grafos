@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <iostream>
 #include <string>
-#include "../includes/Grafo.h"
+#include "../../includes/Grafo.h"
 using namespace std;
 
 //////////////////// MAIN \\\\\\\\\\\\\\\\\\\
@@ -44,7 +44,7 @@ void operar(int casos)
             grafo->conectarVertices(v1, v2);            
         }                
         grafo->gerarSaida(caso, grafo);
-        cout << grafo;
+        //cout << grafo;
         
     }//end for
 

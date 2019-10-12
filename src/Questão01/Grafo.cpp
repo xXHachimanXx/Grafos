@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <iostream>
-#include "../includes/Grafo.h"
+#include "../../includes/Grafo.h"
 using namespace std;
 
 /**
@@ -10,7 +10,6 @@ Grafo::Grafo(int vertices, int arestas)
 {
     if(vertices >= 0 && arestas >= 0)
     {        
-
         this->vertices = vertices;
         this->arestas = arestas;
         this->matriz = new int*[vertices];
@@ -56,17 +55,8 @@ void Grafo::inicializar()
 
 ostream & operator << (ostream &out, Grafo* &grafo)
 {    
-    if(grafo->matriz != NULL)
-    {
-        for(int x = 0; x < grafo->vertices; x++)
-        {
-            for(int y = 0; y < grafo->vertices; y++)
-            {
-                cout << grafo->matriz[x][y] << " ";
-            }            
-            cout << "\n" << endl;
-        }        
-    }else{ cout << "MATRIZ NULA!"; }
+    grafo->mostrarComponentes(); //a c \n a b ...
+    cout << grafo->componentes << " connected components\n\n";
     return out;
 }
 
@@ -142,9 +132,8 @@ void Grafo::buscaEmProfundidade(int v, bool visitados[])
 
 void Grafo::gerarSaida(int caso, Grafo* grafo)
 {
-    cout << "Case #" << to_string(caso+1) << ":\n"; //Case #x: 
-    grafo->mostrarComponentes(); //a c \n a b ...
-    cout << grafo->componentes << " connected components\n\n";    
+    cout << "Case #" << to_string(caso+1) << ":\n"; //Case #x:       
+    cout << grafo;
 }
 
 int Grafo::charToIndex(char v)
