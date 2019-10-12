@@ -15,7 +15,6 @@ class Grafo
         ~Grafo(); //destrutor
         Grafo(int vertices, int arestas); //construtor   
         void inicializar(); //inicializador
-        //void init(int tam); //inicializador   
 
         void conectarVertices(char v1, char v2);             
         void printMatriz();    
@@ -58,9 +57,8 @@ Grafo::Grafo(int vertices, int arestas)
  */
 Grafo::~Grafo()
 {
-    for(int y = 0; y < this->vertices; y++)
+    for(int y = 0; y < vertices; y++)
     {
-        //ERRO AQUIIIIII
         delete matriz[y];
     }
     delete matriz;
@@ -102,8 +100,9 @@ void Grafo::conectarVertices(char v1, char v2)
     //transformar char em posicao na matriz
     int x = (int)v1 - 97;
     int y = (int)v2 - 97;
-    //cout << "conectando " << x << " e " << y << endl;        
-    matriz[x][y] = 1;
+    if(x < y){ matriz[x][y] = 1; }
+    else{ matriz[y][x] = 1;}
+    
 }//end conectarVertices()
 
 /**
@@ -113,14 +112,14 @@ void Grafo::conectarVertices(char v1, char v2)
 void Grafo::mostrarComponentes()
 {     
     //Inicializar um vetor para verificar se os vértices foram visitados
-    bool visitados[this->vertices];
+    bool *visitados = new bool[this->vertices];
     for(int y = 0; y < this->vertices; y++) 
         visitados[y] = false;
 
     for(int y = 0; y < this->vertices; y++)
     {
         if(!visitados[y])
-        {            
+        {                        
             buscaEmProfundidade(y, visitados);
             cout << endl;
             this->componentes++;
@@ -142,9 +141,9 @@ void Grafo::buscaEmProfundidade(int v, bool visitados[])
     for(int y = 0; y < this->vertices; y++) 
     {
         if(matriz[v][y] == 1 && !visitados[y])
-        {                  
+        {
             buscaEmProfundidade(y, visitados);
-        }        
+        }
     }//end for
 
 }//end buscaEmProfundidade()
@@ -206,10 +205,8 @@ void operar(int casos)
             cin >> v1; 
             cin >> v2;
 
-            grafo->conectarVertices(v1, v2);                                   
-        }
-        //grafo->printMatriz();
-        
+            grafo->conectarVertices(v1, v2);            
+        }                
         grafo->gerarSaida(caso, grafo);  
         //cout << "VRAUUUUU";
         

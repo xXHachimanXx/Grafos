@@ -5,10 +5,9 @@ b,
 
 Case #2:
 a,b,c,g,
-d,f,
-e,
+d,e,f,
 h,i,j,
-4 connected components
+3 connected components
 
 Case #3:
 a,b,c,
