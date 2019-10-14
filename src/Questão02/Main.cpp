@@ -1,7 +1,9 @@
 #include <stdio.h>
 #include <iostream>
 #include <string>
+#include <vector>
 #include "../../includes/Grafo.h"
+#include "../../includes/Vertice.h"
 using namespace std;
 
 //////////////////// MAIN \\\\\\\\\\\\\\\\\\\
@@ -21,30 +23,43 @@ int quantidadeDeCasos()
 
 }//end quantidadeDeCasos()
 
+/**
+ * Metodo para ler coordenadas de vértices da entrada,
+ * criá-los e alocá-los em um vetor.
+ * 
+ * @return - vector<Vertice>;
+ */
+vector<Vertice> lerVertices(int quantidade)
+{
+    vector<Vertice> vertices;
+    // loop para criar um vetor de Vertices
+    for(int z = v.begin(); z < quantidade; ++z)
+    {
+        //entrar com as coordenadas das pessoas
+        int x, y; 
+        cin >> x;
+        cin >> y;
+
+        Vertice v(x, y);
+        vertices.push_back(v);
+    }
+
+    return vertices;
+}
 
 void operar(int casos)
 {    
-
     for(int caso = 0; caso < casos; caso++)
     {
-        int vertices, arestas; 
+        int vertices; 
         cin >> vertices;
-        cin >> arestas;        
 
-        Grafo* grafo = new Grafo(vertices, arestas);
+        Grafo* grafo; //criar grafo
+        vector<Vertice> arranjoDeVertices = lerVertices(vertices); //entrar com vertices
 
-        //incluir todas as arestas
-        for(int z = 0; z < arestas; z++)
-        {
-            //pegar vertices a serem ligados
-            char v1, v2;   
-            cin >> v1; 
-            cin >> v2;
 
-            grafo->conectarVertices(v1, v2);            
-        }                
+
         grafo->gerarSaida(caso, grafo);
-        //cout << grafo;
         
     }//end for
 

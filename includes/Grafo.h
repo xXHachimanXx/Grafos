@@ -5,13 +5,16 @@ class Grafo
     public:
         int vertices; //numero de vertices
         int arestas; //numero de arestas
-        int ** matriz; //matriz de adjascência                        
+        int ** matriz; //matriz de adjascência (int)
+        float ** fmatriz; //matriz de adjascência (float)
         int componentes; //numero de componentes conectados
 
         ~Grafo(); //destrutor
-        Grafo(int vertices, int arestas); //construtor   
-        void inicializar(); //inicializador
+        Grafo(int vertices, int arestas); //construtor
+        Grafo(int vertices); //construtor
+        Grafo(); //construtor
 
+        void inicializar(); //inicializador
         void conectarVertices(char v1, char v2);             
         void printMatriz();    
         void buscaEmProfundidade(int vertice, bool visitados[]);

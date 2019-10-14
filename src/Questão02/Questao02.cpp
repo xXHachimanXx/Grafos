@@ -1,7 +1,51 @@
 #include <stdio.h>
 #include <iostream>
+#include <string>
+#include <vector>
 #include "../../includes/Grafo.h"
+#include "../../includes/Vertice.h"
 using namespace std;
+
+//////////////////// GRAFO/VERTICE \\\\\\\\\\\\\\\\\\\
+
+class Grafo
+{
+    public:
+        int vertices; //numero de vertices
+        int arestas; //numero de arestas
+        int ** matriz; //matriz de adjascência (int)
+        float ** fmatriz; //matriz de adjascência (float)
+        int componentes; //numero de componentes conectados
+
+        ~Grafo(); //destrutor
+        Grafo(int vertices, int arestas); //construtor
+        Grafo(int vertices); //construtor
+        Grafo(); //construtor
+
+        void inicializar(); //inicializador
+        void conectarVertices(char v1, char v2);             
+        void printMatriz();          
+
+};
+
+//Usar fórmula de distância entre dois pontos
+class Vertice
+{
+    public:
+        // ----------------- Atributos
+        /**
+         * Coordenadas do grafo no plano.
+         */
+        int x, y; 
+
+        // ----------------- Construtores
+        Vertice();
+        Vertice(int x, int y);
+        
+        // ----------------- Métodos
+        void mostrarVertice();
+};
+
 
 /**
  * Construtor padrão
@@ -135,59 +179,86 @@ void Grafo::conectarVertices(int v1, int v2)
     
 }//end conectarVertices()
 
-/**
- * Método para mostrar os componentes conectados do grafo e a 
- * quantidade destes.
- */
-void Grafo::mostrarComponentes()
-{     
-    //Inicializar um vetor para verificar se os vértices foram visitados
-    bool *visitados = new bool[this->vertices];
-    for(int y = 0; y < this->vertices; y++) 
-        visitados[y] = false;
-
-    for(int y = 0; y < this->vertices; y++)
-    {
-        if(!visitados[y])
-        {                        
-            buscaEmProfundidade(y, visitados);
-            cout << endl;
-            this->componentes++;
-        }
-    }    
-
-}//end mostrarComponentes()
-
-/**
- * Busca em profundidade para contar o número de componentes
- * mostrar as adjascências.
- */ 
-void Grafo::buscaEmProfundidade(int v, bool visitados[])
-{    
-    visitados[v] = true;    
-    cout << indexToChar(v) << ",";
-           
-    for(int y = 0; y < this->vertices; y++) 
-    {
-        if(matriz[v][y] == 1 && !visitados[y])
-            buscaEmProfundidade(y, visitados);        
-    }//end for
-
-}//end buscaEmProfundidade()
-
-void Grafo::gerarSaida(int caso, Grafo* grafo)
-{
-    cout << "Case #" << to_string(caso+1)  << ":\n"; //Case #x:       
-    cout << grafo;
-}
 
 void Grafo::gerarGrafoCompleto()
 {
     
 }
+//////////////////// END -> GRAFO/VERTICE \\\\\\\\\\\\\\\\\\\
 
-int Grafo::charToIndex(char v)
-{ return (int)v - 97; }
+//////////////////// MAIN \\\\\\\\\\\\\\\\\\\
 
-char Grafo::indexToChar(int v)
-{ return (char)v + 97; }
+int quantidadeDeCasos()
+{
+    int casos; 
+    cin >> casos; //entrar com o numero de casos
+
+    if(casos <= 0)
+    {
+        cout << "Quantidade de casos '" << casos << "' inválida.";
+        casos = -1;
+    }    
+
+    return casos;
+
+}//end quantidadeDeCasos()
+
+/**
+ * Metodo para ler coordenadas de vértices da entrada,
+ * criá-los e alocá-los em um vetor.
+ * 
+ * @return - vector<Vertice>;
+ */
+vector<Vertice> lerVertices(int quantidade)
+{
+    vector<Vertice> vertices;
+    // loop para criar um vetor de Vertices
+    for(int z = v.begin(); z < quantidade; ++z)
+    {
+        //entrar com as coordenadas das pessoas
+        int x, y; 
+        cin >> x;
+        cin >> y;
+
+        Vertice v(x, y);
+        vertices.push_back(v);
+    }
+
+    return vertices;
+}
+
+void operar(int casos)
+{    
+    for(int caso = 0; caso < casos; caso++)
+    {
+        int vertices; 
+        cin >> vertices;
+
+        Grafo* grafo; //criar grafo
+        vector<Vertice> arranjoDeVertices = lerVertices(vertices); //entrar com vertices
+
+
+
+        grafo->gerarSaida(caso, grafo);
+        
+    }//end for
+
+}//end operar()
+
+
+int main()
+{    
+    int casos = quantidadeDeCasos(); //ler quantidade de casos
+    operar(casos);
+
+    return 0;
+}
+
+/*
+ * ANOTAÇÕES:
+ * 
+ * - As adjascências na matriz serão os seus respectivos pesos;
+ * 
+ * - Caso não haja adjascência entre determinados vértices, a posição deve 
+ *   ser registrada com -1;
+ */ 

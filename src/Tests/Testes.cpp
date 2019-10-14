@@ -1,10 +1,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <iostream>
+#include <string>
 using namespace std;
  
 namespace top
-{
+{    
     class Saudacao
     {
         private:
@@ -12,7 +13,7 @@ namespace top
 
         public:
             Saudacao(){}
-            Saudacao(string nome) { this->nome = nome; }
+            Saudacao(string nome) : nome(nome) {}
 
             //o metodo abaixo tem acesso aos atributos privates da classe
             //pois foi declarada como "friend"
