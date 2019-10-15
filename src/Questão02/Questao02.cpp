@@ -2,33 +2,10 @@
 #include <iostream>
 #include <string>
 #include <vector>
-#include "../../includes/Grafo.h"
-#include "../../includes/Vertice.h"
+#include <math.h>
+
 using namespace std;
 
-//////////////////// GRAFO/VERTICE \\\\\\\\\\\\\\\\\\\
-
-class Grafo
-{
-    public:
-        int vertices; //numero de vertices
-        int arestas; //numero de arestas
-        int ** matriz; //matriz de adjascência (int)
-        float ** fmatriz; //matriz de adjascência (float)
-        int componentes; //numero de componentes conectados
-
-        ~Grafo(); //destrutor
-        Grafo(int vertices, int arestas); //construtor
-        Grafo(int vertices); //construtor
-        Grafo(); //construtor
-
-        void inicializar(); //inicializador
-        void conectarVertices(char v1, char v2);             
-        void printMatriz();          
-
-};
-
-//Usar fórmula de distância entre dois pontos
 class Vertice
 {
     public:
@@ -36,16 +13,52 @@ class Vertice
         /**
          * Coordenadas do grafo no plano.
          */
-        int x, y; 
+        int x;
+        int y; 
 
         // ----------------- Construtores
-        Vertice();
         Vertice(int x, int y);
         
         // ----------------- Métodos
         void mostrarVertice();
 };
 
+class Grafo
+{
+    public:
+        int vertices; //numero de vertices
+        int arestas; //numero de arestas
+        float ** matriz; //matriz de adjascência (float)
+
+        ~Grafo(); //destrutor    
+        Grafo(int vertices, vector<Vertice> v);
+        Grafo(int vertices);
+        Grafo(); //construtor
+
+        void printMatriz();
+        void gerarGrafoCompleto(vector<Vertice> v);
+
+    private:
+        void inicializar(); //inicializador          
+        float calcularDistancia(Vertice v1, Vertice v2);
+
+};
+
+////////////////////////// VERTICE \\\\\\\\\\\\\\\\\\\\\\\\\
+
+Vertice::Vertice(int x, int y)
+{
+    this->x = x;
+    this->y = y;
+}
+
+void Vertice::mostrarVertice()
+{   
+    cout << "V(" << this->x << ',' << this->y << ')';
+}
+
+
+////////////////////////// GRAFO \\\\\\\\\\\\\\\\\\\\\\\\\
 
 /**
  * Construtor padrão
@@ -55,57 +68,24 @@ Grafo::Grafo()
     this->vertices = 0;
     this->arestas = 0;
     this->matriz = NULL;
-    this->componentes = 0;
 }
 
-/**
- * Método para inicializar a matriz de adjascência.
- */
-Grafo::Grafo(int vertices, int arestas)
-{
-    if(vertices >= 0 && arestas >= 0)
-    {        
-        this->vertices = vertices;
-        this->arestas = arestas;
-        this->matriz = new int*[vertices];
-        this->componentes = 0;
-
-        for(int y = 0; y < vertices; y++)
-        {
-            this->matriz[y] = new int[vertices];
-        }//end for        
-
-        inicializar();
-    }
-    else
-    {
-        cout << "ERRO: Parâmetro(s) do grafo inválido(s)!";
-    }//end if
-}//end Grafo()
-
-/**
- * Método para inicializar a matriz de adjascência.
- */
-Grafo::Grafo(int verticeS)
+Grafo::Grafo(int n)
 {
     if(vertices >= 0)
     {        
-        this->vertices = vertices;
-        this->arestas = 0;
-        this->matriz = new int*[vertices];
-        this->componentes = 0;
+        this->vertices = n;
+        this->arestas = n*(n - 1)/2; //calcular o numero de arestas
+        this->matriz = new float*[vertices];
 
         for(int y = 0; y < vertices; y++)
         {
-            this->matriz[y] = new int[vertices];
-        }//end for        
-
-        inicializar();
+            this->matriz[y] = new float[vertices];
+        }//end for           
+        inicializar();        
     }
     else
-    {
-        cout << "ERRO: Parâmetro(s) do grafo inválido(s)!";
-    }//end if
+    { cout << "ERRO: Parâmetro(s) do grafo inválido(s)!"; }//end if
 }//end Grafo()
 
 /**
@@ -121,7 +101,7 @@ Grafo::~Grafo()
 }
 
 /**
- * Inicializar todas as adjascências com '0'.
+ * Inicializar todas as adjascências com '-1'.
  */
 void Grafo::inicializar()
 {
@@ -129,16 +109,10 @@ void Grafo::inicializar()
     {
         for(int x = 0; x < this->vertices; x++)
             for(int y = 0; y < this->vertices; y++)
-                this->matriz[x][y] = 0;
+                this->matriz[x][y] = -1;
     }
-}//end init()
+}//end inicializar()
 
-ostream & operator << (ostream &out, Grafo* &grafo)
-{    
-    grafo->mostrarComponentes(); //a c \n a b ...
-    cout << grafo->componentes << " connected components\n\n";
-    return out;
-}
 
 void Grafo::printMatriz()
 {
@@ -148,43 +122,45 @@ void Grafo::printMatriz()
         {
             for(int y = 0; y < this->vertices; y++)
             {
-                cout << matriz[x][y] << " ";
+                cout << matriz[x][y] << '\t';
             }            
             cout << "\n" << endl;
         }        
     }else{ cout << "MATRIZ NULA!"; }
 }//end printMatriz()
 
-/**
- * Método para registrar adjascência na matriz.
- */
-void Grafo::conectarVertices(char v1, char v2)
-{
-    //transformar char em posicao na matriz
-    int x = (int)v1 - 97;
-    int y = (int)v2 - 97;
-    if(x < y){ matriz[x][y] = 1; }
-    else{ matriz[y][x] = 1;}
-    
-}//end conectarVertices()
 
-/**
- * Método para registrar adjascência na matriz.
- */
-void Grafo::conectarVertices(int v1, int v2)
+void Grafo::gerarGrafoCompleto(vector<Vertice> vec)
 {
-    //transformar char em posicao na matriz
-    if(v1 < v2){ matriz[v1][v2] = 1; }
-    else{ matriz[v2][v1] = 1; }
-    
-}//end conectarVertices()
+    float distancia;
 
+    for(int x = 0; x < vec.size(); x++)
+    {   
+        for(int y = 0; y < vec.size(); y++)
+        {           
+            if(x != y)
+            { 
+                distancia = this->calcularDistancia( vec.at(x), vec.at(y) );                
+                this->matriz[x][y] = distancia;
+            }
 
-void Grafo::gerarGrafoCompleto()
-{
-    
+        }
+    }
 }
+
+
+/**
+ * Função para calcular a distância entre dois pontos.
+ */
+float Grafo::calcularDistancia(Vertice v1, Vertice v2)
+{
+    return sqrt( pow((v2.x - v1.x), 2) + pow((v2.y - v1.y), 2) );
+}
+
+
 //////////////////// END -> GRAFO/VERTICE \\\\\\\\\\\\\\\\\\\
+
+
 
 //////////////////// MAIN \\\\\\\\\\\\\\\\\\\
 
@@ -203,43 +179,32 @@ int quantidadeDeCasos()
 
 }//end quantidadeDeCasos()
 
-/**
- * Metodo para ler coordenadas de vértices da entrada,
- * criá-los e alocá-los em um vetor.
- * 
- * @return - vector<Vertice>;
- */
-vector<Vertice> lerVertices(int quantidade)
-{
-    vector<Vertice> vertices;
-    // loop para criar um vetor de Vertices
-    for(int z = v.begin(); z < quantidade; ++z)
-    {
-        //entrar com as coordenadas das pessoas
-        int x, y; 
-        cin >> x;
-        cin >> y;
-
-        Vertice v(x, y);
-        vertices.push_back(v);
-    }
-
-    return vertices;
-}
-
 void operar(int casos)
 {    
     for(int caso = 0; caso < casos; caso++)
     {
-        int vertices; 
-        cin >> vertices;
+        int numVertices; 
+        cin >> numVertices;
 
-        Grafo* grafo; //criar grafo
-        vector<Vertice> arranjoDeVertices = lerVertices(vertices); //entrar com vertices
+        vector<Vertice> arranjoDeVertices;
 
+        // loop para criar um vetor de Vertices
+        for(int z = 0; z < numVertices; ++z)
+        {
+            //entrar com as coordenadas das pessoas
+            int x, y; 
+            cin >> x;
+            cin >> y;
+            Vertice v(x, y);
 
+            arranjoDeVertices.push_back(v);
+        }
 
-        grafo->gerarSaida(caso, grafo);
+        Grafo* grafo = new Grafo(numVertices); //criar grafo completo
+        grafo->gerarGrafoCompleto(arranjoDeVertices);
+
+        grafo->printMatriz(); //para debug
+        cout << endl << endl << endl; //para debug
         
     }//end for
 
