@@ -3,6 +3,9 @@
 #include <string>
 #include <vector>
 #include <math.h>
+#include <queue>
+
+#define infinito 2147483647; //definir constante infinito
 
 using namespace std;
 
@@ -37,10 +40,12 @@ class Grafo
 
         void printMatriz();
         void gerarGrafoCompleto(vector<Vertice> v);
+        float MST_PRIM(int r);
 
     private:
-        void inicializar(); //inicializador          
+        void  inicializar(); //inicializador          
         float calcularDistancia(Vertice v1, Vertice v2);
+        int   minKey(int key[], bool mstSet[]);
 
 };
 
@@ -155,6 +160,65 @@ void Grafo::gerarGrafoCompleto(vector<Vertice> vec)
 float Grafo::calcularDistancia(Vertice v1, Vertice v2)
 {
     return sqrt( pow((v2.x - v1.x), 2) + pow((v2.y - v1.y), 2) );
+}
+
+int Grafo::minKey(int key[], bool mstSet[])  
+{      
+    double min = infinito;
+    int min_index;
+    
+    for (int x = 0; x < vertices; x++)
+    {
+        if (mstSet[x] == false && key[x] < min)
+            min = key[x], min_index = x;
+    }
+    return min_index;  
+}  
+
+
+/*
+ * Função para encontrar o menor caminho no grafo.
+ * Algoritmo de PRIM adaptado de https://github.com/Layman806-zz/MST-Prim.
+ */
+float Grafo::MST_PRIM(int inicio)
+{
+    bool mstSet[this->vertices];
+    int key[this->vertices];    
+    int pais[this->vertices];
+    float somaDosPesos = 0.0;
+
+	for(int y = 0; y < vertices; y++)
+    {   //para cada vertice no grafo...
+		key[y] = infinito;
+        mstSet[y] = false;
+	}
+	
+    pais[0] = -1;
+	key[inicio] = 0;
+	
+	for(int y = 0; y < (vertices-1); y++)
+    {		
+		int u = this->minKey(key, mstSet);
+
+        mstSet[u] = true;
+		
+		for (int v = 0; v < vertices; v++)
+        {
+            if (this->matriz[u][v] && mstSet[v] == false && this->matriz[u][v] < key[v]) 
+            {                
+                pais[v] = u; 
+                key[v]  = this->matriz[u][v];
+            }
+        }//end for
+
+	}//end for
+
+    //fazer função de soma dos pesos
+    free(mstSet);
+    free(key);
+    free(pais);
+
+    return somaDosPesos;
 }
 
 
