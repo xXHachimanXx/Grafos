@@ -4,8 +4,9 @@
 #include <vector>
 #include <math.h>
 #include <queue>
+#include <cfloat>
 
-#define infinito 2147483647; //definir constante infinito
+#define infinito FLT_MAX; //definir constante infinito
 
 using namespace std;
 
@@ -45,7 +46,8 @@ class Grafo
     private:
         void  inicializar(); //inicializador          
         float calcularDistancia(Vertice v1, Vertice v2);
-        int   minKey(int key[], bool mstSet[]);
+        int   minKey(float key[], bool mstSet[]);        
+        float somaDosPesos(int pais[]);
 
 };
 
@@ -162,9 +164,25 @@ float Grafo::calcularDistancia(Vertice v1, Vertice v2)
     return sqrt( pow((v2.x - v1.x), 2) + pow((v2.y - v1.y), 2) );
 }
 
-int Grafo::minKey(int key[], bool mstSet[])  
+// A utility function to print the  
+// constructed MST stored in parent[]  
+float Grafo::somaDosPesos(int pais[])  
+{  
+    float soma = 0.0;
+
+    for (int y = 1; y < this->vertices; y++) 
+    {    
+        cout << "Peso V(" << y << ',' << pais[y] << ") = " << matriz[y][pais[y]] << endl;
+        soma = soma + matriz[y][pais[y]];  
+    } 
+    printMatriz();
+
+    return soma;
+} 
+
+int Grafo::minKey(float key[], bool mstSet[])  
 {      
-    double min = infinito;
+    float min = infinito;
     int min_index;
     
     for (int x = 0; x < vertices; x++)
@@ -175,18 +193,23 @@ int Grafo::minKey(int key[], bool mstSet[])
     return min_index;  
 }  
 
-
 /*
  * Função para encontrar o menor caminho no grafo.
  * Algoritmo de PRIM adaptado de https://github.com/Layman806-zz/MST-Prim.
+ * 
+ * Função parar construir a arvore geradora mínima 
+ * do grafo utilizando a matriz de adjascência. A 
+ * função também calcula e retorna a soma das arestas d
+ * a árvore.
  */
 float Grafo::MST_PRIM(int inicio)
 {
-    bool mstSet[this->vertices];
-    int key[this->vertices];    
-    int pais[this->vertices];
+    bool mstSet[this->vertices]; //conjunto de vértices não incluidos na árvore
+    float key[this->vertices];     //conjunto de chaves para achar a aresta com o menor peso
+    int pais[this->vertices];    //conjunto de vérices incluidos na árvore geradora
     float somaDosPesos = 0.0;
 
+    //inicializar todas as chaves com infinito
 	for(int y = 0; y < vertices; y++)
     {   //para cada vertice no grafo...
 		key[y] = infinito;
@@ -204,23 +227,19 @@ float Grafo::MST_PRIM(int inicio)
 		
 		for (int v = 0; v < vertices; v++)
         {
-            if (this->matriz[u][v] && mstSet[v] == false && this->matriz[u][v] < key[v]) 
+            if ( (this->matriz[u][v] && !mstSet[v] ) && (this->matriz[u][v] < key[v]) )
             {                
                 pais[v] = u; 
                 key[v]  = this->matriz[u][v];
             }
         }//end for
 
-	}//end for
+	}//end for  
 
-    //fazer função de soma dos pesos
-    free(mstSet);
-    free(key);
-    free(pais);
-
+    //this->somaDosPesos(pais)
+    //printMatriz();
     return somaDosPesos;
 }
-
 
 //////////////////// END -> GRAFO/VERTICE \\\\\\\\\\\\\\\\\\\
 
@@ -233,7 +252,7 @@ int quantidadeDeCasos()
     int casos; 
     cin >> casos; //entrar com o numero de casos
 
-    if(casos <= 0)
+    if(casos <= 0 || casos > 500)
     {
         cout << "Quantidade de casos '" << casos << "' inválida.";
         casos = -1;
@@ -267,8 +286,11 @@ void operar(int casos)
         Grafo* grafo = new Grafo(numVertices); //criar grafo completo
         grafo->gerarGrafoCompleto(arranjoDeVertices);
 
-        grafo->printMatriz(); //para debug
-        cout << endl << endl << endl; //para debug
+        //grafo->printMatriz(); //para debug
+        //cout << endl << endl << endl; //para debug
+        // grafo->printMatriz();
+        // std::cout.precision(2);
+        // std::cout << std::fixed << grafo->MST_PRIM(0) << endl;
         
     }//end for
 
