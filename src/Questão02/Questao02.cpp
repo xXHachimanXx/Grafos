@@ -32,7 +32,7 @@ class Grafo
     public:
         int vertices; //numero de vertices
         int arestas; //numero de arestas
-        float ** matriz; //matriz de adjascência (float)
+        double ** matriz; //matriz de adjascência (double)
 
         ~Grafo(); //destrutor    
         Grafo(int vertices, vector<Vertice> v);
@@ -41,13 +41,13 @@ class Grafo
 
         void printMatriz();
         void gerarGrafoCompleto(vector<Vertice> v);
-        float MST_PRIM(int r);
+        double MST_PRIM(int r);
 
     private:
         void  inicializar(); //inicializador          
-        float calcularDistancia(Vertice v1, Vertice v2);
-        int   minKey(float key[], bool mstSet[]);        
-        float somaDosPesos(int pais[]);
+        double calcularDistancia(Vertice v1, Vertice v2);
+        int   minKey(double key[], bool mstSet[]);        
+        double somaDosPesos(int pais[]);
 
 };
 
@@ -83,11 +83,11 @@ Grafo::Grafo(int n)
     {        
         this->vertices = n;
         this->arestas = n*(n - 1)/2; //calcular o numero de arestas
-        this->matriz = new float*[vertices];
+        this->matriz = new double*[vertices];
 
         for(int y = 0; y < vertices; y++)
         {
-            this->matriz[y] = new float[vertices];
+            this->matriz[y] = new double[vertices];
         }//end for           
         inicializar();        
     }
@@ -139,7 +139,7 @@ void Grafo::printMatriz()
 
 void Grafo::gerarGrafoCompleto(vector<Vertice> vec)
 {
-    float distancia;
+    double distancia;
 
     for(int x = 0; x < vec.size(); x++)
     {   
@@ -159,16 +159,16 @@ void Grafo::gerarGrafoCompleto(vector<Vertice> vec)
 /**
  * Função para calcular a distância entre dois pontos.
  */
-float Grafo::calcularDistancia(Vertice v1, Vertice v2)
+double Grafo::calcularDistancia(Vertice v1, Vertice v2)
 {
     return sqrt( pow((v2.x - v1.x), 2) + pow((v2.y - v1.y), 2) );
 }
 
 // A utility function to print the  
 // constructed MST stored in parent[]  
-float Grafo::somaDosPesos(int pais[])  
+double Grafo::somaDosPesos(int pais[])  
 {  
-    float soma = 0.0;
+    double soma = 0.0;
 
     for (int y = 1; y < this->vertices; y++) 
     {    
@@ -180,14 +180,14 @@ float Grafo::somaDosPesos(int pais[])
     return soma;
 } 
 
-int Grafo::minKey(float key[], bool mstSet[])  
+int Grafo::minKey(double key[], bool mstSet[])  
 {      
-    float min = infinito;
+    double min = infinito;
     int min_index;
     
     for (int x = 0; x < vertices; x++)
     {
-        if (mstSet[x] == false && key[x] < min)
+        if ( !mstSet[x] && key[x] < min )
             min = key[x], min_index = x;
     }
     return min_index;  
@@ -202,12 +202,12 @@ int Grafo::minKey(float key[], bool mstSet[])
  * função também calcula e retorna a soma das arestas d
  * a árvore.
  */
-float Grafo::MST_PRIM(int inicio)
+double Grafo::MST_PRIM(int inicio)
 {
     bool mstSet[this->vertices]; //conjunto de vértices não incluidos na árvore
-    float key[this->vertices];     //conjunto de chaves para achar a aresta com o menor peso
+    double key[this->vertices];     //conjunto de chaves para achar a aresta com o menor peso
     int pais[this->vertices];    //conjunto de vérices incluidos na árvore geradora
-    float somaDosPesos = 0.0;
+    double somaDosPesos = 0.0;
 
     //inicializar todas as chaves com infinito
 	for(int y = 0; y < vertices; y++)
@@ -216,8 +216,8 @@ float Grafo::MST_PRIM(int inicio)
         mstSet[y] = false;
 	}
 	
-    pais[0] = -1;
-	key[inicio] = 0;
+    pais[inicio] = -1;
+	key[inicio] = 0.0;
 	
 	for(int y = 0; y < (vertices-1); y++)
     {		
@@ -236,9 +236,9 @@ float Grafo::MST_PRIM(int inicio)
 
 	}//end for  
 
-    //this->somaDosPesos(pais)
+    return this->somaDosPesos(pais);
     //printMatriz();
-    return somaDosPesos;
+    //return somaDosPesos;
 }
 
 //////////////////// END -> GRAFO/VERTICE \\\\\\\\\\\\\\\\\\\
@@ -289,8 +289,9 @@ void operar(int casos)
         //grafo->printMatriz(); //para debug
         //cout << endl << endl << endl; //para debug
         // grafo->printMatriz();
-        // std::cout.precision(2);
-        // std::cout << std::fixed << grafo->MST_PRIM(0) << endl;
+         //std::cout.precision(2);
+         //std::cout << std::fixed << grafo->MST_PRIM(0) << endl;
+         cout << grafo->MST_PRIM(0) << endl;
         
     }//end for
 
