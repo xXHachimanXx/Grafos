@@ -13,14 +13,17 @@ class Grafo
         int componentes; //numero de componentes conectados
 
         ~Grafo(); //destrutor
-        Grafo(int vertices, int arestas); //construtor   
-        void inicializar(); //inicializador
+        Grafo(int vertices, int arestas); //construtor
+        Grafo* clone();   
 
-        void conectarVertices(char v1, char v2);             
+        void inicializar(); //inicializador
+        void transpor(); //transpor matriz do grafo
+        void conectarVertices(int v1, int v2);             
         void printMatriz();    
         void buscaEmProfundidade(int vertice, bool visitados[]);
         void mostrarComponentes();
-        void gerarSaida(int caso, Grafo* grafo);
+        void gerarSaida(int caso, Grafo* grafo);        
+        bool testarCadeia(Grafo* grafo);
 
         int charToIndex(char v);
         char indexToChar(int v);       
@@ -65,6 +68,40 @@ Grafo::~Grafo()
 }
 
 /**
+ * Método para clonar um grafo.
+ */
+Grafo* Grafo::clone()
+{
+    Grafo* grafo = new Grafo(vertices);
+
+    for(int x = 0; x < vertices; x++)
+    {
+        for(int y = 0; y < vertices; y++)
+        {
+            g->matriz[x][y] = matriz[x][y];
+        }
+    }
+
+    return g;
+}
+
+
+/**
+ * Método para transpor um grafo(G^t).
+ */
+void Grafo::transpor()
+{
+    //o que é linha vira coluna
+    for(int x = 0; x < this->vertices; x++)
+    {
+        for(int y = 0; y < this->vertices; y++)
+        {
+            this->matriz[y][x] = this->matriz[x][y];
+        }
+    }
+}
+
+/**
  * Inicializar todas as adjascências com '0'.
  */
 void Grafo::inicializar()
@@ -95,13 +132,10 @@ void Grafo::printMatriz()
 /**
  * Método para registrar adjascência na matriz.
  */
-void Grafo::conectarVertices(char v1, char v2)
-{
-    //transformar char em posicao na matriz
-    int x = (int)v1 - 97;
-    int y = (int)v2 - 97;
+void Grafo::conectarVertices(int x, int y)
+{   
     if(x < y){ matriz[x][y] = 1; }
-    else{ matriz[y][x] = 1;}
+    else{ matriz[y][x] = 1; }
     
 }//end conectarVertices()
 
@@ -109,7 +143,7 @@ void Grafo::conectarVertices(char v1, char v2)
  * Método para mostrar os componentes conectados do grafo e a 
  * quantidade destes.
  */
-void Grafo::mostrarComponentes()
+bool Grafo::testarCadeia()
 {     
     //Inicializar um vetor para verificar se os vértices foram visitados
     bool *visitados = new bool[this->vertices];
@@ -121,8 +155,7 @@ void Grafo::mostrarComponentes()
         if(!visitados[y])
         {                        
             buscaEmProfundidade(y, visitados);
-            cout << endl;
-            this->componentes++;
+            //cout << endl;
         }
     }    
 
@@ -185,27 +218,39 @@ int quantidadeDeCasos()
 
 }//end quantidadeDeCasos()
 
+/**
+ * Método para verificar condições iniciais.
+ * @return - bool
+ */
+bool verificarCondicoes(int vertices, int arestas)
+{
+    return (vertices <= 0 || vertices > 100000 || arestas <= 0 || arestas > 1000000)? false : true;
+}
 
 int main()
 {            
     int vertices, arestas; 
     cin >> vertices;
     cin >> arestas;        
-    if(vertices <= 0 || vertices >)
-    Grafo* grafo = new Grafo(vertices, arestas);
 
-    //incluir todas as arestas
-    for(int z = 0; z < arestas; z++)
-    {
-        //pegar vertices a serem ligados
-        char v1, v2;   
-        cin >> v1; 
-        cin >> v2;
+    if(verificarCondicoes(vertices, arestas))
+    {    
+        Grafo* grafo = new Grafo(vertices, arestas);
 
-        grafo->conectarVertices(v1, v2);            
-    }                
-    grafo->gerarSaida(caso, grafo);  
-    
+        //incluir todas as arestas
+        for(int z = 0; z < arestas; z++)
+        {
+            //pegar vertices a serem ligados
+            int v1, v2;   
+            cin >> v1; 
+            cin >> v2;
+
+            grafo->conectarVertices(v1, v2);            
+        }                
+        //grafo->gerarSaida(caso, grafo);  
+
+
+    }else{ cout << "ERRO: Valores inválidos." << endl; }
 
     return 0;
 }
