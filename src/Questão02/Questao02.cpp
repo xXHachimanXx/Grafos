@@ -172,12 +172,10 @@ double Grafo::somaDosPesos(int pais[])
 
     for (int y = 1; y < this->vertices; y++) 
     {    
-        cout << "Peso V(" << y << ',' << pais[y] << ") = " << matriz[y][pais[y]] << endl;
-        soma = soma + matriz[y][pais[y]];  
+        soma = soma + this->matriz[y][pais[y]];  
     } 
-    printMatriz();
 
-    return soma;
+    return soma/100; //converter centimetros para metros
 } 
 
 int Grafo::minKey(double key[], bool mstSet[])  
@@ -205,7 +203,7 @@ int Grafo::minKey(double key[], bool mstSet[])
 double Grafo::MST_PRIM(int inicio)
 {
     bool mstSet[this->vertices]; //conjunto de vértices não incluidos na árvore
-    double key[this->vertices];     //conjunto de chaves para achar a aresta com o menor peso
+    double key[this->vertices];  //conjunto de chaves para achar a aresta com o menor peso
     int pais[this->vertices];    //conjunto de vérices incluidos na árvore geradora
     double somaDosPesos = 0.0;
 
@@ -227,7 +225,7 @@ double Grafo::MST_PRIM(int inicio)
 		
 		for (int v = 0; v < vertices; v++)
         {
-            if ( (this->matriz[u][v] && !mstSet[v] ) && (this->matriz[u][v] < key[v]) )
+            if ( (this->matriz[u][v] && !mstSet[v]) && (this->matriz[u][v] < key[v]) )
             {                
                 pais[v] = u; 
                 key[v]  = this->matriz[u][v];
@@ -235,10 +233,8 @@ double Grafo::MST_PRIM(int inicio)
         }//end for
 
 	}//end for  
-
+    
     return this->somaDosPesos(pais);
-    //printMatriz();
-    //return somaDosPesos;
 }
 
 //////////////////// END -> GRAFO/VERTICE \\\\\\\\\\\\\\\\\\\
@@ -289,9 +285,10 @@ void operar(int casos)
         //grafo->printMatriz(); //para debug
         //cout << endl << endl << endl; //para debug
         // grafo->printMatriz();
-         //std::cout.precision(2);
+        //  std::cout.precision(2);
          //std::cout << std::fixed << grafo->MST_PRIM(0) << endl;
-         cout << grafo->MST_PRIM(0) << endl;
+         printf("%.2lf\n\n", grafo->MST_PRIM(0)); 
+         
         
     }//end for
 
