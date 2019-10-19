@@ -14,16 +14,22 @@ class Grafo
 
         ~Grafo(); //destrutor
         Grafo(int vertices, int arestas); //construtor
+        Grafo(int vertices); //construtor
         Grafo* clone();   
 
         void inicializar(); //inicializador
         void transpor(); //transpor matriz do grafo
         void conectarVertices(int v1, int v2);             
         void printMatriz();    
-        void buscaEmProfundidade(int vertice, bool visitados[]);
+        bool buscaEmProfundidade(int v, int destino, bool visitados[]);
         void mostrarComponentes();
         void gerarSaida(int caso, Grafo* grafo);        
-        bool testarCadeia(Grafo* grafo);
+        bool testarCadeia();
+
+    private:
+        int time;
+        int* times; 
+        bool bolada;
 
         int charToIndex(char v);
         char indexToChar(int v);       
@@ -56,6 +62,30 @@ Grafo::Grafo(int vertices, int arestas)
 }//end Grafo()
 
 /**
+ * Método para inicializar a matriz de adjascência.
+ */
+Grafo::Grafo(int vertices)
+{
+    if(vertices >= 0)
+    {        
+        this->vertices = vertices;
+        this->matriz = new int*[vertices];
+
+        for(int y = 0; y < vertices; y++)
+        {
+            this->matriz[y] = new int[vertices];
+        }//end for        
+
+        inicializar();
+    }
+    else
+    {
+        cout << "ERRO: Parâmetro(s) do grafo inválido(s)!";
+    }//end if
+}//end Grafo()
+
+
+/**
  * Destrutor
  */
 Grafo::~Grafo()
@@ -72,7 +102,7 @@ Grafo::~Grafo()
  */
 Grafo* Grafo::clone()
 {
-    Grafo* grafo = new Grafo(vertices);
+    Grafo* g = new Grafo(vertices);
 
     for(int x = 0; x < vertices; x++)
     {
@@ -134,9 +164,7 @@ void Grafo::printMatriz()
  */
 void Grafo::conectarVertices(int x, int y)
 {   
-    if(x < y){ matriz[x][y] = 1; }
-    else{ matriz[y][x] = 1; }
-    
+    matriz[x][y] = 1;    
 }//end conectarVertices()
 
 /**
@@ -147,17 +175,24 @@ bool Grafo::testarCadeia()
 {     
     //Inicializar um vetor para verificar se os vértices foram visitados
     bool *visitados = new bool[this->vertices];
-    for(int y = 0; y < this->vertices; y++) 
-        visitados[y] = false;
+    this->time = 0; //inicializar tempo
+    this->times = new int[this->vertices];
+    this->bolada = true;
 
-    for(int y = 0; y < this->vertices; y++)
+    for(int x = 0; x < this->vertices; x++)
     {
-        if(!visitados[y])
-        {                        
-            buscaEmProfundidade(y, visitados);
-            //cout << endl;
+        //inicializar visitados
+        for(int y = 0; y < this->vertices; y++) 
+            visitados[y] = false;
+
+        for(int y = x; y < this->vertices; y++)
+        {                            
+            if(!visitados[y]) //se cor for branca
+                buscaEmProfundidade(x, y, visitados);
         }
     }    
+    
+    return false;
 
 }//end mostrarComponentes()
 
@@ -165,19 +200,28 @@ bool Grafo::testarCadeia()
  * Busca em profundidade para contar o número de componentes
  * mostrar as adjascências.
  */ 
-void Grafo::buscaEmProfundidade(int v, bool visitados[])
+bool Grafo::buscaEmProfundidade(int v, int destino, bool visitados[])
 {    
     //if(!visitados[v]){ cout << indexToChar(v) << ","; }
-    visitados[v] = true;    
-    cout << indexToChar(v) << ",";
-           
-    for(int y = 0; y < this->vertices; y++) 
+    visitados[v] = true; // Marca o Vértice que está passando inicio como já visitado
+    bool resp = false;
+
+    if( v != destino )
     {
-        if(matriz[v][y] == 1 && !visitados[y])
+        //this->time++;
+                
+        for(int y = 0; y < this->vertices; y++) 
         {
-            buscaEmProfundidade(y, visitados);
-        }
-    }//end for
+            if(matriz[v][y] == 1 && !visitados[y])
+            {
+                resp = buscaEmProfundidade(y, destino, visitados);
+            }
+        }//end for
+
+        //times[v] = time + 1;
+    }else{ resp = true; }
+
+    return resp;
 
 }//end buscaEmProfundidade()
 
@@ -248,6 +292,7 @@ int main()
             grafo->conectarVertices(v1, v2);            
         }                
         //grafo->gerarSaida(caso, grafo);  
+        grafo->testarCadeia();
 
 
     }else{ cout << "ERRO: Valores inválidos." << endl; }
