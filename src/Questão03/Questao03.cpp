@@ -16,14 +16,12 @@ class Grafo
         Grafo(int vertices, int arestas); //construtor
         Grafo(int vertices); //construtor
         Grafo* clone();   
+        Grafo* transpor(); //transpor matriz do grafo
 
         void inicializar(); //inicializador
-        void transpor(); //transpor matriz do grafo
         void conectarVertices(int v1, int v2);             
         void printMatriz();    
-        bool buscaEmProfundidade(int v, int destino, bool visitados[]);
-        void mostrarComponentes();
-        void gerarSaida(int caso, Grafo* grafo);        
+        bool buscaEmProfundidade(int v, int destino, bool visitados[]);      
         bool testarCadeia();
 
     private:
@@ -108,7 +106,7 @@ Grafo* Grafo::clone()
     {
         for(int y = 0; y < vertices; y++)
         {
-            g->matriz[x][y] = matriz[x][y];
+            g->matriz[x][y] = this->matriz[x][y];
         }
     }
 
@@ -119,16 +117,20 @@ Grafo* Grafo::clone()
 /**
  * Método para transpor um grafo(G^t).
  */
-void Grafo::transpor()
+Grafo* Grafo::transpor()
 {
+    Grafo* gt = this->clone();
+
     //o que é linha vira coluna
     for(int x = 0; x < this->vertices; x++)
     {
         for(int y = 0; y < this->vertices; y++)
         {
-            this->matriz[y][x] = this->matriz[x][y];
+            gt->matriz[x][y] = this->matriz[y][x];
         }
     }
+    
+    return gt;
 }
 
 /**
@@ -164,7 +166,11 @@ void Grafo::printMatriz()
  */
 void Grafo::conectarVertices(int x, int y)
 {   
-    matriz[x][y] = 1;    
+    //U (1 ≤ U ≤ N) e V (1 ≤ V ≤ N)
+    x--; y--;
+
+    this->matriz[x][y] = 1;
+
 }//end conectarVertices()
 
 /**
@@ -173,11 +179,12 @@ void Grafo::conectarVertices(int x, int y)
  */
 bool Grafo::testarCadeia()
 {     
+    cout << "aosidaisuf" << endl;
     //Inicializar um vetor para verificar se os vértices foram visitados
     bool *visitados = new bool[this->vertices];
-    this->time = 0; //inicializar tempo
-    this->times = new int[this->vertices];
-    this->bolada = true;
+    //this->time = 0; //inicializar tempo
+    //this->times = new int[this->vertices];
+    this->bolada = true;    
 
     for(int x = 0; x < this->vertices; x++)
     {
@@ -189,12 +196,24 @@ bool Grafo::testarCadeia()
         {                            
             if(!visitados[y]) //se cor for branca
                 buscaEmProfundidade(x, y, visitados);
-        }
-    }    
-    
-    return false;
+        }//end for
 
-}//end mostrarComponentes()
+        //testar se todos foram visitados
+        for(int y = 0; y < this->vertices; y++)
+        {
+            if(!visitados[y])
+            {            
+                y = this->vertices;
+                x = this->vertices;
+                bolada = false;
+            }
+        }//end for
+
+    }//end for
+
+    return bolada;
+
+}//end testarCadeia()
 
 /**
  * Busca em profundidade para contar o número de componentes
@@ -224,15 +243,6 @@ bool Grafo::buscaEmProfundidade(int v, int destino, bool visitados[])
     return resp;
 
 }//end buscaEmProfundidade()
-
-void Grafo::gerarSaida(int caso, Grafo* grafo)
-{
-    cout << "Case #" << to_string(caso+1) << ":\n"; //Case #x: 
-    grafo->mostrarComponentes(); //a c \n a b ...
-    cout << grafo->componentes << " connected components\n\n";
-    //grafo->printMatriz();
-    //cout << "ERRO AQUI....." << endl;
-}
 
 int Grafo::charToIndex(char v)
 {
@@ -279,7 +289,7 @@ int main()
 
     if(verificarCondicoes(vertices, arestas))
     {    
-        Grafo* grafo = new Grafo(vertices, arestas);
+        Grafo* grafo = new Grafo(vertices, arestas);        
 
         //incluir todas as arestas
         for(int z = 0; z < arestas; z++)
@@ -289,11 +299,15 @@ int main()
             cin >> v1; 
             cin >> v2;
 
-            grafo->conectarVertices(v1, v2);            
-        }                
-        //grafo->gerarSaida(caso, grafo);  
-        grafo->testarCadeia();
+            grafo->conectarVertices(v1, v2);                        
+        } 
 
+        Grafo* grafoT = grafo->transpor();                
+
+        if(grafo->testarCadeia() || grafoT->testarCadeia()) 
+            cout << "Bolada\n";
+        else
+            cout << "Nao Bolada"; 
 
     }else{ cout << "ERRO: Valores inválidos." << endl; }
 
