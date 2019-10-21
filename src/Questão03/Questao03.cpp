@@ -179,37 +179,33 @@ void Grafo::conectarVertices(int x, int y)
  */
 bool Grafo::testarCadeia()
 {     
-    cout << "aosidaisuf" << endl;
+    //cout << "aosidaisuf" << endl;
     //Inicializar um vetor para verificar se os vértices foram visitados
     bool *visitados = new bool[this->vertices];
     //this->time = 0; //inicializar tempo
     //this->times = new int[this->vertices];
     this->bolada = true;    
 
-    for(int x = 0; x < this->vertices; x++)
-    {
-        //inicializar visitados
-        for(int y = 0; y < this->vertices; y++) 
-            visitados[y] = false;
+    //inicializar visitados
+    for(int y = 0; y < this->vertices; y++) 
+        visitados[y] = false;
 
-        for(int y = x; y < this->vertices; y++)
-        {                            
-            if(!visitados[y]) //se cor for branca
-                buscaEmProfundidade(x, y, visitados);
-        }//end for
-
-        //testar se todos foram visitados
-        for(int y = 0; y < this->vertices; y++)
-        {
-            if(!visitados[y])
-            {            
-                y = this->vertices;
-                x = this->vertices;
-                bolada = false;
-            }
-        }//end for
-
+    for(int y = 0; y < this->vertices; y++)
+    {                            
+        if(!visitados[y]) //se cor for branca
+            buscaEmProfundidade(0, y, visitados);
     }//end for
+
+    //testar se todos foram visitados
+    for(int y = 0; y < this->vertices; y++)
+    {
+        if(!visitados[y])
+        {            
+            y = this->vertices;
+            //x = this->vertices;
+            bolada = false;
+        }
+    }//end for    
 
     return bolada;
 
