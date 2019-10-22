@@ -15,13 +15,13 @@ class Grafo
         ~Grafo(); //destrutor
         Grafo(int vertices, int arestas); //construtor
         Grafo(int vertices); //construtor
-        Grafo* clone();   
+        Grafo* clone();
         Grafo* transpor(); //transpor matriz do grafo
 
         void inicializar(); //inicializador
-        void conectarVertices(int v1, int v2);             
-        void printMatriz();    
-        bool buscaEmProfundidade(int v, int destino, bool visitados[]);      
+        void conectarVertices(int v1, int v2);
+        void printMatriz();
+        void buscaEmProfundidade(int v, bool visitados[]);
         bool testarCadeia();
 
     private:
@@ -193,12 +193,8 @@ bool Grafo::testarCadeia()
     //inicializar visitados
     for(int y = 0; y < this->vertices; y++) 
         visitados[y] = false;
-
-    for(int y = 0; y < this->vertices; y++)
-    {                            
-        if(!visitados[y]) //se cor for branca
-            buscaEmProfundidade(0, y, visitados);
-    }//end for
+    
+    buscaEmProfundidade(0, visitados);
 
     //testar se todos foram visitados
     for(int y = 0; y < this->vertices; y++)
@@ -206,7 +202,6 @@ bool Grafo::testarCadeia()
         if(!visitados[y])
         {            
             y = this->vertices;
-            //x = this->vertices;
             bolada = false;
         }
     }//end for    
@@ -219,28 +214,18 @@ bool Grafo::testarCadeia()
  * Busca em profundidade para contar o número de componentes
  * mostrar as adjascências.
  */ 
-bool Grafo::buscaEmProfundidade(int v, int destino, bool visitados[])
+void Grafo::buscaEmProfundidade(int v, bool visitados[])
 {    
     //if(!visitados[v]){ cout << indexToChar(v) << ","; }
     visitados[v] = true; // Marca o Vértice que está passando inicio como já visitado
-    bool resp = false;
-
-    if( v != destino )
-    {
-        //this->time++;
                 
-        for(int y = 0; y < this->vertices; y++) 
+    for(int y = 0; y < this->vertices; y++) 
+    {
+        if(matriz[v][y] == 1 && !visitados[y])
         {
-            if(matriz[v][y] == 1 && !visitados[y])
-            {
-                resp = buscaEmProfundidade(y, destino, visitados);
-            }
-        }//end for
-
-        //times[v] = time + 1;
-    }else{ resp = true; }
-
-    return resp;
+            buscaEmProfundidade(y, visitados);
+        }
+    }//end for
 
 }//end buscaEmProfundidade()
 
@@ -278,10 +263,6 @@ int quantidadeDeCasos()
  */
 bool verificarCondicoes(int vertices, int arestas)
 {
-    if (1 == 0) cout << "top";
-
-    else while (1 == 1) cout << "\t";
-
     return (vertices <= 0 || vertices > 100000 || arestas <= 0 || arestas > 1000000)? false : true;
 }
 
