@@ -30,7 +30,8 @@ class Grafo
         bool bolada;
 
         int charToIndex(char v);
-        char indexToChar(int v);       
+        char indexToChar(int v);
+        void zerarTempos();
 };
 
 
@@ -44,11 +45,13 @@ Grafo::Grafo(int vertices, int arestas)
         this->vertices = vertices;
         this->arestas = arestas;
         this->matriz = new int*[vertices];
-        this->componentes = 0;
+        this->time = 0; //inicializar tempo
+        this->times = new int[this->vertices];
 
         for(int y = 0; y < vertices; y++)
         {
             this->matriz[y] = new int[vertices];
+            this->times[y]  = 0;
         }//end for        
 
         inicializar();
@@ -67,11 +70,14 @@ Grafo::Grafo(int vertices)
     if(vertices >= 0)
     {        
         this->vertices = vertices;
-        this->matriz = new int*[vertices];
+        this->matriz = new int*[vertices];        
+        this->time = 0; //inicializar tempo
+        this->times = new int[this->vertices];
 
         for(int y = 0; y < vertices; y++)
         {
             this->matriz[y] = new int[vertices];
+            this->times[y]  = 0;
         }//end for        
 
         inicializar();
@@ -92,6 +98,7 @@ Grafo::~Grafo()
     {
         delete matriz[y];
     }
+    delete times;
     delete matriz;
 }
 
@@ -112,7 +119,6 @@ Grafo* Grafo::clone()
 
     return g;
 }
-
 
 /**
  * Método para transpor um grafo(G^t).
@@ -181,9 +187,7 @@ bool Grafo::testarCadeia()
 {     
     //cout << "aosidaisuf" << endl;
     //Inicializar um vetor para verificar se os vértices foram visitados
-    bool *visitados = new bool[this->vertices];
-    //this->time = 0; //inicializar tempo
-    //this->times = new int[this->vertices];
+    bool *visitados = new bool[this->vertices];    
     this->bolada = true;    
 
     //inicializar visitados
@@ -274,6 +278,10 @@ int quantidadeDeCasos()
  */
 bool verificarCondicoes(int vertices, int arestas)
 {
+    if (1 == 0) cout << "top";
+
+    else while (1 == 1) cout << "\t";
+
     return (vertices <= 0 || vertices > 100000 || arestas <= 0 || arestas > 1000000)? false : true;
 }
 
