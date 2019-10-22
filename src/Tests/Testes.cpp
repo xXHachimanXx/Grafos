@@ -63,6 +63,7 @@ int main()
    top::Saudacao* s = new top::Saudacao();   
    cin >> s;
    cout << s << endl;
+   
    /*
    cout << "MAIOR: " << top::maior<int>(10, 20) << endl;
    cout << "MAIOR: " << top::maior<string>("10", "20") << endl;
