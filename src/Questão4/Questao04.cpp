@@ -1,7 +1,9 @@
 #include <stdio.h>
 #include <iostream>
 #include <string>
+#include <limits.h>
 
+#define infinito INT_MAX;
 using namespace std;
 
 class Grafo
@@ -22,6 +24,8 @@ class Grafo
         void mostrarComponentes();
         void gerarSaida(int caso, Grafo* grafo);
 
+    private:
+        int menorDistancia(bool* conjuntoAMC, int* distancia);
         int charToIndex(char v);
         char indexToChar(int v);       
 };
@@ -73,7 +77,7 @@ void Grafo::inicializar()
     {
         for(int x = 0; x < this->vertices; x++)
             for(int y = 0; y < this->vertices; y++)
-                this->matriz[x][y] = 0;
+                this->matriz[x][y] = -1;
     }
 }//end init()
 
@@ -95,14 +99,12 @@ void Grafo::printMatriz()
 /**
  * Método para registrar adjascência na matriz.
  */
-void Grafo::conectarVertices(char v1, char v2)
+void Grafo::conectarVertices(int A, int B, int preco)
 {
-    //transformar char em posicao na matriz
-    int x = (int)v1 - 97;
-    int y = (int)v2 - 97;
-    if(x < y){ matriz[x][y] = 1; }
-    else{ matriz[y][x] = 1;}
-    
+    //Cidades começam a contar do 1, então subtrai-se 1 de cada coordenada
+    A--; B--;
+    this->matriz[A][B] = preco;
+    this->matriz[B][A] = preco;
 }//end conectarVertices()
 
 /**
@@ -148,24 +150,50 @@ void Grafo::buscaEmProfundidade(int v, bool visitados[])
 
 }//end buscaEmProfundidade()
 
-void Grafo::gerarSaida(int caso, Grafo* grafo)
+/**
+ * Método para pegar a menor distância do vértice em quesão à outro.
+ */
+int Grafo::menorDistancia(bool* conjuntoAMC, int* distancia)
 {
-    cout << "Case #" << to_string(caso+1) << ":\n"; //Case #x: 
-    grafo->mostrarComponentes(); //a c \n a b ...
-    cout << grafo->componentes << " connected components\n\n";
-    //grafo->printMatriz();
-    //cout << "ERRO AQUI....." << endl;
-}
+    int menor = infinito;
+    int idMenor = -1;
+    
+    for(int y = 0; y < this->verices; y++)
+    {
+        if(!conjuntoAMC[y] && distancia[v] <= menor)
+        {
+            menor = distancia[y]; //menor distância
+            idMenor = y; //endereço, no vetor, da menor distância
+        }
+    }
 
-int Grafo::charToIndex(char v)
-{
-    return (int)v - 97;
-}
+    return idMenor;
+}//end menorDistancia()
 
-char Grafo::indexToChar(int v)
+
+void Grafo::djkstra(int inicio, int destino)
 {
-    return (char)v + 97;
-}
+    int N = destino;
+    int* distancia = new int[N];
+    bool* conjuntoAMC = new bool[this->vertices];
+
+    for(int y = 0; y < this->vertices; y++)
+    {
+        distancia[y] = infinito;
+        conjuntoAMC[y] = false;
+    }
+
+    distancia[inicio] = 0; //setar distância do primeiro vertice à ele mesmo
+
+    
+    for(int x = 0; x < vertices-1; x++) //x < vertices-1 pois desconsideramos o primeiro vertice para a pesquisa
+    {
+        int menorDistancia = menorDistancia(conjuntoAMC, distancia);
+    }
+
+}//end djkstra()
+
+
 
 
 //////////////////// MAIN \\\\\\\\\\\\\\\\\\\
@@ -195,19 +223,26 @@ int main()
     {        
         if( verificarCondicoes(numCidades, rotas) )
         {
-            Grafo* grafo = new Grafo(vertices, arestas);
+            int A, B, C;
+            int amigos, assentos;
+
+            Grafo* grafo = new Grafo(numCidades, rotas);
 
             //incluir todas as arestas
             for(int z = 0; z < rotas; z++)
             {
-                //pegar vertices a serem ligados
-                char v1, v2;   
-                cin >> v1; 
-                cin >> v2;
+                //ler a tripla de inteiros
+                cin >> A; //cidade A
+                cin >> B; //cidade B
+                cin >> C; //preço
 
-                grafo->conectarVertices(v1, v2);            
-            }                
-            grafo->gerarSaida(caso, grafo);  
+                grafo->conectarVertices(A, B, C);       
+            }
+
+            cin >> amigos;
+            cin >> assentos;
+
+            //grafo->gerarSaida(caso, grafo);  
         }
         else
         {
