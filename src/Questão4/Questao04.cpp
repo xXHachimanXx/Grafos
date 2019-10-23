@@ -23,6 +23,7 @@ class Grafo
         void buscaEmProfundidade(int vertice, bool visitados[]);
         void mostrarComponentes();
         void gerarSaida(int caso, Grafo* grafo);
+        void djkstra(int inicio, int destino);
 
     private:
         int menorDistancia(bool* conjuntoAMC, int* distancia);
@@ -168,6 +169,7 @@ int Grafo::menorDistancia(bool* conjuntoAMC, int* distancia)
     }
 
     return idMenor;
+
 }//end menorDistancia()
 
 
@@ -176,6 +178,7 @@ void Grafo::djkstra(int inicio, int destino)
     int N = destino;
     int* distancia = new int[N];
     bool* conjuntoAMC = new bool[this->vertices];
+    vector<int> caminho;
 
     for(int y = 0; y < this->vertices; y++)
     {
@@ -185,11 +188,20 @@ void Grafo::djkstra(int inicio, int destino)
 
     distancia[inicio] = 0; //setar distância do primeiro vertice à ele mesmo
 
-    
-    for(int x = 0; x < vertices-1; x++) //x < vertices-1 pois desconsideramos o primeiro vertice para a pesquisa
+    int idMenorDist = -1;
+    for(int y = 0; y < this->vertices-1; y++) //x < vertices-1 pois desconsideramos o primeiro vertice para a pesquisa
     {
-        int menorDistancia = menorDistancia(conjuntoAMC, distancia);
-    }
+        idMenorDist = menorDistancia(conjuntoAMC, distancia);
+
+        for(int x = 0; x < this->vertices; x++)
+        {
+            if( distancia[x] > distancia[idMenorDist] + this->matriz[idMenorDist][x])
+            {
+                distancia[x] = distancia[idMenorDist] + matriz[idMenorDist][x];
+            }
+        }//end for
+
+    }//end for
 
 }//end djkstra()
 
