@@ -28,6 +28,7 @@ class Grafo
         int time;
         int* times; 
         bool bolada;
+        bool verificarCondicoes(int vertices, int arestas);
 
         int charToIndex(char v);
         char indexToChar(int v);

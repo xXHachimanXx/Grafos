@@ -18,17 +18,13 @@ class Grafo
         Grafo(int vertices, int arestas); //construtor   
         void inicializar(); //inicializador
 
-        void conectarVertices(char v1, char v2);             
+        void conectarVertices(int v1, int v2, int preco);
         void printMatriz();    
-        void buscaEmProfundidade(int vertice, bool visitados[]);
-        void mostrarComponentes();
         void gerarSaida(int caso, Grafo* grafo);
-        void djkstra(int inicio, int destino);
+        int djkstra(int inicio, int destino);
 
     private:
-        int menorDistancia(bool* conjuntoAMC, int* distancia);
-        int charToIndex(char v);
-        char indexToChar(int v);       
+        int menorDistancia(bool* conjuntoAMC, int* distancia);     
 };
 
 
@@ -108,48 +104,6 @@ void Grafo::conectarVertices(int A, int B, int preco)
     this->matriz[B][A] = preco;
 }//end conectarVertices()
 
-/**
- * Método para mostrar os componentes conectados do grafo e a 
- * quantidade destes.
- */
-void Grafo::mostrarComponentes()
-{     
-    //Inicializar um vetor para verificar se os vértices foram visitados
-    bool *visitados = new bool[this->vertices];
-    for(int y = 0; y < this->vertices; y++) 
-        visitados[y] = false;
-
-    for(int y = 0; y < this->vertices; y++)
-    {
-        if(!visitados[y])
-        {                        
-            buscaEmProfundidade(y, visitados);
-            cout << endl;
-            this->componentes++;
-        }
-    }    
-
-}//end mostrarComponentes()
-
-/**
- * Busca em profundidade para contar o número de componentes
- * mostrar as adjascências.
- */ 
-void Grafo::buscaEmProfundidade(int v, bool visitados[])
-{    
-    //if(!visitados[v]){ cout << indexToChar(v) << ","; }
-    visitados[v] = true;    
-    cout << indexToChar(v) << ",";
-           
-    for(int y = 0; y < this->vertices; y++) 
-    {
-        if(matriz[v][y] == 1 && !visitados[y])
-        {
-            buscaEmProfundidade(y, visitados);
-        }
-    }//end for
-
-}//end buscaEmProfundidade()
 
 /**
  * Método para pegar a menor distância do vértice em quesão à outro.
@@ -159,9 +113,9 @@ int Grafo::menorDistancia(bool* conjuntoAMC, int* distancia)
     int menor = infinito;
     int idMenor = -1;
     
-    for(int y = 0; y < this->verices; y++)
+    for(int y = 0; y < this->vertices; y++)
     {
-        if(!conjuntoAMC[y] && distancia[v] <= menor)
+        if(!conjuntoAMC[y] && distancia[y] <= menor)
         {
             menor = distancia[y]; //menor distância
             idMenor = y; //endereço, no vetor, da menor distância
@@ -172,13 +126,24 @@ int Grafo::menorDistancia(bool* conjuntoAMC, int* distancia)
 
 }//end menorDistancia()
 
+/*
+int calcularCusto(int* distancias)
+{
+    int c = -1;
 
-void Grafo::djkstra(int inicio, int destino)
+    for(int y : distancias)
+        c += distancias[y];
+
+    return c;
+}
+*/
+
+int Grafo::djkstra(int inicio, int destino)
 {
     int N = destino;
     int* distancia = new int[N];
     bool* conjuntoAMC = new bool[this->vertices];
-    vector<int> caminho;
+    int custo = 0;    
 
     for(int y = 0; y < this->vertices; y++)
     {
@@ -195,17 +160,21 @@ void Grafo::djkstra(int inicio, int destino)
 
         for(int x = 0; x < this->vertices; x++)
         {
-            if( distancia[x] > distancia[idMenorDist] + this->matriz[idMenorDist][x])
+            if( !conjuntoAMC[x] && matriz[idMenorDist][x] 
+                && distancia[x] >= distancia[idMenorDist] + this->matriz[idMenorDist][x] 
+                && this->matriz[idMenorDist][x] != -1 && distancia[idMenorDist] != infinito )
             {
                 distancia[x] = distancia[idMenorDist] + matriz[idMenorDist][x];
+                custo += distancia[x];
+                this->matriz[idMenorDist][x] = -1; //anulando rota já demarcada 
             }
         }//end for
 
     }//end for
+    
+    return custo;
 
 }//end djkstra()
-
-
 
 
 //////////////////// MAIN \\\\\\\\\\\\\\\\\\\
@@ -225,18 +194,28 @@ int quantidadeDeCasos()
 
 }//end quantidadeDeCasos()
 
+/**
+ * Método para verificar condições iniciais.
+ * @return - bool
+ */
+bool verificarCondicoes(int vertices, int arestas)
+{
+    return !(vertices < 2 || vertices > 100 || arestas < 1 || arestas > 5000);
+}
 
 // Os amigos querem ir da cidade 1 até a cidade N
 int main()
 {    
-    int numCidades, rotas;
+    int numCidades, rotas, instancia = 0;
 
     while( cin >> numCidades >> rotas )
-    {        
+    {                
         if( verificarCondicoes(numCidades, rotas) )
         {
             int A, B, C;
             int amigos, assentos;
+            int custoTotal = 0;
+                   
 
             Grafo* grafo = new Grafo(numCidades, rotas);
 
@@ -253,8 +232,23 @@ int main()
 
             cin >> amigos;
             cin >> assentos;
+            // amigos <= assentos -> exec 1 vez
+            // amigos > assentos  -> exec amigos/assentos vezes
+            instancia++;
+            cout << "Instancia " << instancia << endl; 
 
-            //grafo->gerarSaida(caso, grafo);  
+            if( amigos > assentos )
+                custoTotal = grafo->djkstra(A, B);
+            else
+            {
+                for(int y = 0; y < amigos/assentos && custoTotal >= 0; y++)
+                    custoTotal += grafo->djkstra(A, B);                
+            }                       
+
+            if(custoTotal > 0)
+                cout << custoTotal << endl << endl << endl;
+            else
+                cout << "impossivel " << custoTotal << endl << endl << endl; 
         }
         else
         {
