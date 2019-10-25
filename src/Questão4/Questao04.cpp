@@ -3,7 +3,8 @@
 #include <string>
 #include <limits.h>
 
-#define infinito INT_MAX;
+#define infinito INT_MAX
+
 using namespace std;
 
 class Grafo
@@ -147,32 +148,35 @@ int Grafo::djkstra(int inicio, int destino)
 
     for(int y = 0; y < this->vertices; y++)
     {
-        distancia[y] = infinito;
+        distancia[y] = ( matriz[inicio][y] != -1 ? matriz[inicio][y] : infinito );
         conjuntoAMC[y] = false;
     }
 
     distancia[inicio] = 0; //setar distância do primeiro vertice à ele mesmo
 
     int idMenorDist = -1;
+
     for(int y = 0; y < this->vertices-1; y++) //x < vertices-1 pois desconsideramos o primeiro vertice para a pesquisa
-    {
+    {        
         idMenorDist = menorDistancia(conjuntoAMC, distancia);
+        conjuntoAMC[y] = true;
 
         for(int x = 0; x < this->vertices; x++)
         {
-            if( !conjuntoAMC[x] && matriz[idMenorDist][x] 
-                && distancia[x] >= distancia[idMenorDist] + this->matriz[idMenorDist][x] 
-                && this->matriz[idMenorDist][x] != -1 && distancia[idMenorDist] != infinito )
+            if(    !conjuntoAMC[x]
+                && distancia[idMenorDist] + this->matriz[idMenorDist][x] < distancia[x]
+                && this->matriz[idMenorDist][x] != -1 
+                && distancia[idMenorDist] != infinito )
             {
                 distancia[x] = distancia[idMenorDist] + matriz[idMenorDist][x];
-                custo += distancia[x];
+            //  custo += distancia[x];
                 this->matriz[idMenorDist][x] = -1; //anulando rota já demarcada 
             }
         }//end for
 
     }//end for
     
-    return custo;
+    return distancia[vertices-1];
 
 }//end djkstra()
 
@@ -232,6 +236,7 @@ int main()
 
             cin >> amigos;
             cin >> assentos;
+
             // amigos <= assentos -> exec 1 vez
             // amigos > assentos  -> exec amigos/assentos vezes
             instancia++;
