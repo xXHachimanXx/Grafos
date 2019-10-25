@@ -100,8 +100,9 @@ void Grafo::conectarVertices(int A, int B, int preco)
 {
     //Cidades começam a contar do 1, então subtrai-se 1 de cada coordenada
     A--; B--;
-    this->matriz[A][B] = preco;
-    this->matriz[B][A] = preco;
+    
+    this->matriz[A][B] = preco*10;    
+    this->matriz[B][A] = preco*10;
 }//end conectarVertices()
 
 
@@ -126,24 +127,14 @@ int Grafo::menorDistancia(bool* conjuntoAMC, int* distancia)
 
 }//end menorDistancia()
 
-/*
-int calcularCusto(int* distancias)
-{
-    int c = -1;
-
-    for(int y : distancias)
-        c += distancias[y];
-
-    return c;
-}
-*/
 
 int Grafo::djkstra(int inicio, int destino)
 {
-    int N = destino;
-    int* distancia = new int[N];
-    bool* conjuntoAMC = new bool[this->vertices];
-    int custo = 0;    
+    int* distancia = new int[destino];
+    bool* conjuntoAMC = new bool[destino];
+    int custo = 0;
+    int menorDistancia;
+    int idMenordist = -1;
 
     for(int y = 0; y < this->vertices; y++)
     {
@@ -153,26 +144,32 @@ int Grafo::djkstra(int inicio, int destino)
 
     distancia[inicio] = 0; //setar distância do primeiro vertice à ele mesmo
 
-    int idMenorDist = -1;
-    for(int y = 0; y < this->vertices-1; y++) //x < vertices-1 pois desconsideramos o primeiro vertice para a pesquisa
+    for(int y = 0; y < vertices; y++) //x < vertices-1 pois desconsideramos o primeiro vertice para a pesquisa
     {
-        idMenorDist = menorDistancia(conjuntoAMC, distancia);
+        int menorDistancia = infinito;        
 
-        for(int x = 0; x < this->vertices; x++)
+        idMenordist = this->menorDistancia(conjuntoAMC, distancia);
+        menorDistancia = distancia[idMenordist];
+
+        if(menorDistancia != INT_MAX)
         {
-            if( !conjuntoAMC[x] && matriz[idMenorDist][x] 
-                && distancia[x] >= distancia[idMenorDist] + this->matriz[idMenorDist][x] 
-                && this->matriz[idMenorDist][x] != -1 && distancia[idMenorDist] != infinito )
-            {
-                distancia[x] = distancia[idMenorDist] + matriz[idMenorDist][x];
-                custo += distancia[x];
-                this->matriz[idMenorDist][x] = -1; //anulando rota já demarcada 
+            conjuntoAMC[idMenordist] = true;
+            for(int x = 0; x < this->vertices; x++)
+            {            
+                if(this->matriz[idMenordist][x] > 0 && distancia[x] > distancia[idMenordist] + this->matriz[idMenordist][x])
+                {
+                    distancia[x] = distancia[idMenordist] + this->matriz[idMenordist][x];                    
+                    custo += distancia[x];
+                    cout << matriz[idMenordist][x] << ", ";
+                    this->matriz[idMenordist][x] = -1;
+                }
             }
-        }//end for
+        }else{ y = vertices; }
 
-    }//end for
-    
-    return custo;
+    }//end for  
+    cout << endl; 
+
+    return distancia[destino-1];
 
 }//end djkstra()
 
@@ -214,8 +211,7 @@ int main()
         {
             int A, B, C;
             int amigos, assentos;
-            int custoTotal = 0;
-                   
+            int custoTotal = 0;                   
 
             Grafo* grafo = new Grafo(numCidades, rotas);
 
@@ -236,19 +232,22 @@ int main()
             // amigos > assentos  -> exec amigos/assentos vezes
             instancia++;
             cout << "Instancia " << instancia << endl; 
-
-            if( amigos > assentos )
-                custoTotal = grafo->djkstra(A, B);
+            
+            if( amigos <= assentos )
+            { 
+                custoTotal = grafo->djkstra(0, numCidades);
+            }
             else
             {
                 for(int y = 0; y < amigos/assentos && custoTotal >= 0; y++)
-                    custoTotal += grafo->djkstra(A, B);                
+                    custoTotal += grafo->djkstra(0, numCidades);                
             }                       
 
             if(custoTotal > 0)
                 cout << custoTotal << endl << endl << endl;
             else
                 cout << "impossivel " << custoTotal << endl << endl << endl; 
+            
         }
         else
         {
