@@ -132,48 +132,54 @@ int Grafo::menorDistancia(bool* conjuntoAMC, int* distancia)
 int Grafo::djkstra(int inicio, int destino)
 {
     int* distancia = new int[destino];
-    bool* conjuntoAMC = new bool[destino];
+    bool* visitados = new bool[destino];
     int caminho[destino];
 
     //INICIALIZAÇÕES
-    for(int y = 0; y < destino; y++)
+    for(int y = 0; y < vertices; y++)
     {
-        distancia[y] = ( matriz[inicio][y] != -1 ? matriz[inicio][y] : infinito );
-        conjuntoAMC[y] = false;
-        caminho[y] = -1;
+        distancia[y] = ( matriz[inicio][y] > 0 ? matriz[inicio][y] : infinito);
+        cout << "dist: " << distancia[y] << endl;
+        visitados[y] = false;
     }
     distancia[inicio] = 0; //setar distância do primeiro vertice à ele mesmo
-    int idMenorDist = -1;
 
+    //DEBUG
     for(int y = 0; y < vertices; y++)
         cout << distancia[y] << " ";
 
-    for(int y = 0; y < destino - 1; y++) //x < vertices-1 pois desconsideramos o primeiro vertice para a pesquisa
+    for(int y = 0; y < vertices - 1; y++) //x < vertices-1 pois desconsideramos o primeiro vertice para a pesquisa
     {        
-        idMenorDist = menorDistancia(conjuntoAMC, distancia);        
+        int idMenorDist = menorDistancia(visitados, distancia);        
         cout << "ID top: " << idMenorDist << endl;
-        conjuntoAMC[idMenorDist] = true;
+        visitados[idMenorDist] = true;
 
-        for(int x = 0; x < this->vertices; x++)
+        for(int x = 0; x < vertices; x++)
         {
             //se: é diferente de -1, foi visitado
-            if(    this->matriz[idMenorDist][x] != -1
-                && !conjuntoAMC[x] 
+            if( !visitados[x] 
                 && distancia[idMenorDist] + this->matriz[idMenorDist][x] < distancia[x] )
             {                
                 distancia[x] = distancia[idMenorDist] + matriz[idMenorDist][x];
                 cout << "iD: " << idMenorDist << " Distancia: " << distancia[x] << endl;
                 this->matriz[idMenorDist][x] = -1; //anulando rota já demarcada 
-                this->matriz[x][idMenorDist] = -1; //anulando rota já demarcada 
+                this->matriz[x][idMenorDist] = -1; //anulando rota já demarcada             
             }
-
+            
+            // else
+            // {
+            //     cout << "Motivos: " << endl;
+            //     cout << "Matriz[idMenorDist][x]: " << matriz[idMenorDist][x] << endl;
+            //     cout << "Visitados: " << visitados[x] << endl;
+            //     cout << "Distancia: " << distancia[idMenorDist] + this->matriz[idMenorDist][x] << " >= " << distancia[x] << endl << endl;
+                
+            // }
+ 
         }//end for
 
     }//end for
-
     
-    
-    return distancia[vertices-1];
+    return distancia[destino-1];
 
 }//end djkstra()
 
@@ -241,13 +247,15 @@ int main()
 
             if( amigos <= assentos )
             {
-                custoTotal = grafo->djkstra(0, numCidades);
+                custoTotal = grafo->djkstra(0, numCidades-1);
             }
             else
             {
                 for(int y = 0; y < ceil(amigos/assentos); y++)
-                    custoTotal = custoTotal + grafo->djkstra(0, numCidades);
+                {
+                    custoTotal = custoTotal + grafo->djkstra(0, numCidades-1);
                     grafo->printMatriz();
+                }
             }                       
 
             if(custoTotal > 0 && custoTotal != infinito)

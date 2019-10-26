@@ -1,0 +1,393 @@
+Instancia 1
+dist: 2147483647
+dist: 20
+dist: 30
+dist: 10
+0 20 30 10 ID top: 0
+ID top: 3
+ID top: 1
+iD: 1 Distancia: 19
+-1 20 30 10 
+
+20 -1 -1 50 
+
+30 -1 -1 40 
+
+10 50 40 -1 
+
+dist: 2147483647
+dist: 20
+dist: 30
+dist: 10
+0 20 30 10 ID top: 0
+ID top: 3
+ID top: 1
+iD: 1 Distancia: 19
+-1 20 30 10 
+
+20 -1 -1 50 
+
+30 -1 -1 40 
+
+10 50 40 -1 
+
+38
+
+
+Instancia 2
+dist: 2147483647
+dist: 20
+dist: 30
+dist: 2147483647
+0 20 30 2147483647 ID top: 0
+iD: 0 Distancia: -1
+ID top: 3
+ID top: 1
+iD: 1 Distancia: 19
+19
+
+
+Instancia 3
+dist: 2147483647
+dist: 20
+dist: 30
+dist: 2147483647
+0 20 30 2147483647 ID top: 0
+iD: 0 Distancia: -1
+ID top: 3
+ID top: 1
+iD: 1 Distancia: 19
+-1 20 30 -1 
+
+20 -1 -1 50 
+
+30 -1 -1 40 
+
+-1 50 40 -1 
+
+dist: 2147483647
+dist: 20
+dist: 30
+dist: 2147483647
+0 20 30 2147483647 ID top: 0
+iD: 0 Distancia: -1
+ID top: 3
+ID top: 1
+iD: 1 Distancia: 19
+-1 20 30 -1 
+
+20 -1 -1 50 
+
+30 -1 -1 40 
+
+-1 50 40 -1 
+
+dist: 2147483647
+dist: 20
+dist: 30
+dist: 2147483647
+0 20 30 2147483647 ID top: 0
+iD: 0 Distancia: -1
+ID top: 3
+ID top: 1
+iD: 1 Distancia: 19
+-1 20 30 -1 
+
+20 -1 -1 50 
+
+30 -1 -1 40 
+
+-1 50 40 -1 
+
+dist: 2147483647
+dist: 20
+dist: 30
+dist: 2147483647
+0 20 30 2147483647 ID top: 0
+iD: 0 Distancia: -1
+ID top: 3
+ID top: 1
+iD: 1 Distancia: 19
+-1 20 30 -1 
+
+20 -1 -1 50 
+
+30 -1 -1 40 
+
+-1 50 40 -1 
+
+dist: 2147483647
+dist: 20
+dist: 30
+dist: 2147483647
+0 20 30 2147483647 ID top: 0
+iD: 0 Distancia: -1
+ID top: 3
+ID top: 1
+iD: 1 Distancia: 19
+-1 20 30 -1 
+
+20 -1 -1 50 
+
+30 -1 -1 40 
+
+-1 50 40 -1 
+
+dist: 2147483647
+dist: 20
+dist: 30
+dist: 2147483647
+0 20 30 2147483647 ID top: 0
+iD: 0 Distancia: -1
+ID top: 3
+ID top: 1
+iD: 1 Distancia: 19
+-1 20 30 -1 
+
+20 -1 -1 50 
+
+30 -1 -1 40 
+
+-1 50 40 -1 
+
+dist: 2147483647
+dist: 20
+dist: 30
+dist: 2147483647
+0 20 30 2147483647 ID top: 0
+iD: 0 Distancia: -1
+ID top: 3
+ID top: 1
+iD: 1 Distancia: 19
+-1 20 30 -1 
+
+20 -1 -1 50 
+
+30 -1 -1 40 
+
+-1 50 40 -1 
+
+dist: 2147483647
+dist: 20
+dist: 30
+dist: 2147483647
+0 20 30 2147483647 ID top: 0
+iD: 0 Distancia: -1
+ID top: 3
+ID top: 1
+iD: 1 Distancia: 19
+-1 20 30 -1 
+
+20 -1 -1 50 
+
+30 -1 -1 40 
+
+-1 50 40 -1 
+
+dist: 2147483647
+dist: 20
+dist: 30
+dist: 2147483647
+0 20 30 2147483647 ID top: 0
+iD: 0 Distancia: -1
+ID top: 3
+ID top: 1
+iD: 1 Distancia: 19
+-1 20 30 -1 
+
+20 -1 -1 50 
+
+30 -1 -1 40 
+
+-1 50 40 -1 
+
+dist: 2147483647
+dist: 20
+dist: 30
+dist: 2147483647
+0 20 30 2147483647 ID top: 0
+iD: 0 Distancia: -1
+ID top: 3
+ID top: 1
+iD: 1 Distancia: 19
+-1 20 30 -1 
+
+20 -1 -1 50 
+
+30 -1 -1 40 
+
+-1 50 40 -1 
+
+dist: 2147483647
+dist: 20
+dist: 30
+dist: 2147483647
+0 20 30 2147483647 ID top: 0
+iD: 0 Distancia: -1
+ID top: 3
+ID top: 1
+iD: 1 Distancia: 19
+-1 20 30 -1 
+
+20 -1 -1 50 
+
+30 -1 -1 40 
+
+-1 50 40 -1 
+
+dist: 2147483647
+dist: 20
+dist: 30
+dist: 2147483647
+0 20 30 2147483647 ID top: 0
+iD: 0 Distancia: -1
+ID top: 3
+ID top: 1
+iD: 1 Distancia: 19
+-1 20 30 -1 
+
+20 -1 -1 50 
+
+30 -1 -1 40 
+
+-1 50 40 -1 
+
+dist: 2147483647
+dist: 20
+dist: 30
+dist: 2147483647
+0 20 30 2147483647 ID top: 0
+iD: 0 Distancia: -1
+ID top: 3
+ID top: 1
+iD: 1 Distancia: 19
+-1 20 30 -1 
+
+20 -1 -1 50 
+
+30 -1 -1 40 
+
+-1 50 40 -1 
+
+dist: 2147483647
+dist: 20
+dist: 30
+dist: 2147483647
+0 20 30 2147483647 ID top: 0
+iD: 0 Distancia: -1
+ID top: 3
+ID top: 1
+iD: 1 Distancia: 19
+-1 20 30 -1 
+
+20 -1 -1 50 
+
+30 -1 -1 40 
+
+-1 50 40 -1 
+
+dist: 2147483647
+dist: 20
+dist: 30
+dist: 2147483647
+0 20 30 2147483647 ID top: 0
+iD: 0 Distancia: -1
+ID top: 3
+ID top: 1
+iD: 1 Distancia: 19
+-1 20 30 -1 
+
+20 -1 -1 50 
+
+30 -1 -1 40 
+
+-1 50 40 -1 
+
+dist: 2147483647
+dist: 20
+dist: 30
+dist: 2147483647
+0 20 30 2147483647 ID top: 0
+iD: 0 Distancia: -1
+ID top: 3
+ID top: 1
+iD: 1 Distancia: 19
+-1 20 30 -1 
+
+20 -1 -1 50 
+
+30 -1 -1 40 
+
+-1 50 40 -1 
+
+dist: 2147483647
+dist: 20
+dist: 30
+dist: 2147483647
+0 20 30 2147483647 ID top: 0
+iD: 0 Distancia: -1
+ID top: 3
+ID top: 1
+iD: 1 Distancia: 19
+-1 20 30 -1 
+
+20 -1 -1 50 
+
+30 -1 -1 40 
+
+-1 50 40 -1 
+
+dist: 2147483647
+dist: 20
+dist: 30
+dist: 2147483647
+0 20 30 2147483647 ID top: 0
+iD: 0 Distancia: -1
+ID top: 3
+ID top: 1
+iD: 1 Distancia: 19
+-1 20 30 -1 
+
+20 -1 -1 50 
+
+30 -1 -1 40 
+
+-1 50 40 -1 
+
+dist: 2147483647
+dist: 20
+dist: 30
+dist: 2147483647
+0 20 30 2147483647 ID top: 0
+iD: 0 Distancia: -1
+ID top: 3
+ID top: 1
+iD: 1 Distancia: 19
+-1 20 30 -1 
+
+20 -1 -1 50 
+
+30 -1 -1 40 
+
+-1 50 40 -1 
+
+dist: 2147483647
+dist: 20
+dist: 30
+dist: 2147483647
+0 20 30 2147483647 ID top: 0
+iD: 0 Distancia: -1
+ID top: 3
+ID top: 1
+iD: 1 Distancia: 19
+-1 20 30 -1 
+
+20 -1 -1 50 
+
+30 -1 -1 40 
+
+-1 50 40 -1 
+
+380
+
+
