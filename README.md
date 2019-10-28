@@ -1,2 +1,2 @@
 # Grafos
-Implementando algoritmos em grafos
+Implementando algoritmos em grafos.
